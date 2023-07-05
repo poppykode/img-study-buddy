@@ -1,6 +1,15 @@
 {% extends 'auth_shared.html' %}
 {% load static %}
-{% block title %}Preview{% endblock %}
+{% block title %}Coach Preview{% endblock %}
 {% block content %}
-
+<div class="container-xxl container-p-y" style="text-align: center;">
+    <div class="misc-wrapper">
+      <h2 class="mb-2 mx-2">Review</h2>
+      <p class="mb-4 mx-2">Hi {{request.user.}} We will notify you via email once your account is verified 🙂.</p>
+      <a href="{% url 'logout' %}" class="btn btn-primary">leave site</a>
+      <div class="mt-3">
+        <img src="{% static 'assets/img/illustrations/page-misc-error-light.png' %}" alt="page-misc-error-light" width="500" class="img-fluid" data-app-dark-img="illustrations/page-misc-error-dark.png" data-app-light-img="illustrations/page-misc-error-light.png">
+      </div>
+    </div>
+  </div>
 {% endblock %}

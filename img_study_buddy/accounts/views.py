@@ -18,7 +18,8 @@ from img_study_buddy.utils import (
     delete_a_file,
     deserialise_,
     serialise_,
-    complete_registration
+    complete_registration,
+    dash_board_redirect
     
 ) 
 from . import forms
@@ -155,8 +156,6 @@ def handle_sessions_forward(request,form_number):
             )
         request.session[settings.WORK_EXPERIENCE_INFO]=serialise_(work_experienceForm_info_)
         #next button
-        print('__________')
-        print(deserialise_(request.session[settings.WORK_EXPERIENCE_INFO]))
         return redirect('accounts:handle_form_displays',(form_number+1))
     elif form_number == 5:
         motivation_info_ = {
@@ -335,15 +334,17 @@ def save_candidate_data(request):
 @login_required
 def redirect_logged(request):
     user = request.user
-    if not user.is_registration_complete and not user.is_coach_accepted:
-        return redirect('accounts:coach_application_preview')
-    elif not user.is_registration_complete:
-        return redirect('accounts:handle_form_displays',1)
-    elif user.is_candidate and user.is_registration_complete:
-        return redirect('accounts:candidate_dashboard')
-    elif user.is_coach and user.is_registration_complete and user.is_coach_accepted:
-        return redirect('accounts:coach_dashboard')
+    if not user.is_admin:
+        if not user.is_registration_complete:
+            return redirect('accounts:handle_form_displays',1)
+        elif user.is_registration_complete and not user.is_coach_accepted:
+            return redirect('accounts:coach_application_preview')
+        elif user.is_registration_complete and user.is_coach_accepted:
+            return dash_board_redirect(user)
+        else:
+            pass
     return redirect('accounts:admin_dashboard')
+
 
 @login_required  
 def coach_application_preview(request):
