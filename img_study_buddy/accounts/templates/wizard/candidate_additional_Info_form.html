@@ -1,0 +1,56 @@
+{% extends 'auth_shared.html' %}
+{% load back_stepper %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Candidate Aditional Info{% endblock %}
+{% block content %}
+<div class="authentication-wrapper authentication-basic container-p-y">
+  <div class="authentication-inner" style=" max-width: fit-content;">
+  <div class="card">
+      <div class="card-body">
+        {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% endif %}
+   
+        <h4 class="mb-2 text-center"> Step {{form_number }} of {% if request.user.is_coach %} 5 {% else %} 2 {% endif %}</h4>
+        <form class="mb-3" action="{% url 'accounts:handle_sessions_forward' form_number %}" method="POST">
+         
+          {% csrf_token %}
+         
+           
+                <div class="mb-3">
+                   
+                    {{ form.exam_date|as_crispy_field }}
+                  </div>
+                  <div class="mb-3">
+                   
+                    {{ form.availability|as_crispy_field}}
+                  </div>
+
+          <div class="mb-3">
+            {% if not form_number == 1 %}
+            <a  href="{% url 'accounts:handle_form_displays' 1 %}" class="btn btn-primary">First step</a>
+            <a  href="{% url 'accounts:handle_form_displays' form_number|back_stepper:1 %}" class="btn btn-primary">Previous step</a>
+            {% endif %}
+            {% if request.user.is_candidate %}
+            <button  class="btn btn-success" type="submit"> Next step </button>
+            {% else %}
+            <button  class="btn btn-success" type="submit"> Submit  </button>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+
+{% block exit %}
+{% include 'wizard/snippets/exit.html' %}
+{% endblock %}

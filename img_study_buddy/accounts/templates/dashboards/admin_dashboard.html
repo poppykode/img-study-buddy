@@ -1,0 +1,22 @@
+{% extends 'shared.html' %}
+{% load static %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+      <li class="breadcrumb-item">
+        <a href="{% url 'accounts:redirect_logged' %}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">Admin Dashboard</li>
+    </ol>
+  </nav>
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+      <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+      </button>
+      {{ message }}
+  </div>
+  {% endfor %}
+  {% endif %}
+{% endblock %}

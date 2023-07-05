@@ -1,0 +1,113 @@
+{% extends 'auth_shared.html' %}
+{% load back_stepper %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Education{% endblock %}
+{% block content %}
+<div class="authentication-wrapper authentication-basic container-p-y">
+  <div class="authentication-inner" style=" max-width: fit-content;">
+    <div class="card">
+        <h5 class="card-header">Step {{form_number|back_stepper:1 }} of {% if request.user.is_coach %} 5 {% else %} 2 {% endif %}</h5>
+  
+        <form class="mb-3" action="{% url 'accounts:handle_sessions_forward' form_number %}" method="POST">
+            {% csrf_token %}
+          
+        <div class="table-responsive text-nowrap">
+          <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="button" value="Add Educational Info" id="newrows"
+                        class="btn btn-success">                
+                        <input type="button" value="Remove Selected Item" id="delnewrows"
+                        class="btn btn-danger"> 
+                    </th>               
+                </tr>
+            </thead>      
+            <tbody class="table-border-bottom-0">
+        {% if back_step %}
+        {% for item in obj %}
+            <tr>
+                <td> 
+                    <div id="div_id_name_of_instutution" class="mb-3">
+                        <label for="id_name_of_instutution" class="form-label requiredField"> Name of instutution<span class="asteriskField">*</span> </label>
+                        <input type="text" value="{{item.name_of_instutution}}" name="name_of_instutution" maxlength="255" class="textinput form-control" required="" id="id_name_of_instutution">
+                    </div>
+                </td>
+                <td> 
+                    <div id="div_id_period_from" class="mb-3">
+                        <label for="id_period_from" class="form-label requiredField"> Period from<span class="asteriskField">*</span></label>
+                        <input type="date" value="{{item.period_from}}" name="period_from" class="datepicker dateinput form-control" data-date-format="YYYY-MM-DD" required="" id="id_period_from">
+                    </div>
+                </td>
+                <td> 
+                    <div id="div_id_period_to" class="mb-3">
+                        <label for="id_period_to" class="form-label requiredField"> Period to<span class="asteriskField">*</span></label>
+                        <input type="date" value="{{item.period_to}}" name="period_to" class="datepicker dateinput form-control" data-date-format="YYYY-MM-DD" required="" id="id_period_to">
+                    </div>
+                </td>
+                <td>
+                    {% if forloop.counter == 1 %}
+                    <input type="checkbox" class="form-control form-check-input" name="checkbx" disabled>
+                    {% else %}
+                    <input type="checkbox" class="form-control form-check-input" name="checkbx">
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %}
+              <tr>
+                <td> {{form.name_of_instutution|as_crispy_field }}</td>
+                <td> {{form.period_from|as_crispy_field}}</td>
+                <td> {{form.period_to|as_crispy_field}}</td>
+                <td><input type='checkbox' class='form-control form-check-input' name='checkbx' disabled></td>
+              </tr>
+        {% endif %}
+            </tbody>
+            <tfoot class="table-border-bottom-0">
+                <tr>
+                    <td>
+                        {% if not form_number == 1 %}
+                        <a  href="{% url 'accounts:handle_form_displays' 1 %}" class="btn btn-primary">First step</a>
+                        <a  href="{% url 'accounts:handle_form_displays' form_number|back_stepper:2 %}" class="btn btn-primary">Previous step</a>
+                        {% endif %}
+                        {% if request.user.is_coach %}
+                         <button  class="btn btn-success" type="submit"> Next step </button>
+                        {% endif %}
+                    </td>
+                </tr>
+              </tfoot>
+          </table>
+        </div>
+    </form>
+      </div>
+</div>
+</div>
+{% endblock %}
+{% block exit %}
+{% include 'wizard/snippets/exit.html' %}
+{% endblock %}
+{% block javascript %}
+<script>
+    $(document).ready(function () {
+        $("#newrows").click(function () {
+            var addcontrols = "<tr>"
+            addcontrols += '<td><label for="id_name_of_instutution" class="form-label requiredField"> Name of instutution<span class="asteriskField">*</span> </label> <input type="text" name="name_of_instutution" maxlength="255" class="textinput form-control" required id="id_name_of_instutution"></td>'
+            addcontrols += '<td> <label for="id_period_from" class="form-label requiredField"> Period from<span class="asteriskField">*</span></label> <input type="date" name="period_from" class="datepicker dateinput form-control" data-date-format="YYYY-MM-DD" required id="id_period_from"></td>'
+            addcontrols += '<td>  <label for="id_period_to" class="form-label requiredField"> Period to<span class="asteriskField">*</span></label><input type="date"  name="period_to" class="datepicker dateinput form-control" data-date-format="YYYY-MM-DD" required id="id_period_to"></td>'
+            addcontrols += '<td>  <input type="checkbox" class="form-control form-check-input" name="checkbx"></td>'
+            addcontrols += "</tr>";
+            $("table tbody").append(addcontrols);
+        });
+        $("#delnewrows").click(function () {
+            $("table tbody").find('input[name="checkbx"]').each(function () {
+                if ($(this).is(":checked")) {
+                    $(this).parents("tr").remove();
+                }
+            });
+        });
+
+    });
+
+</script>
+{% endblock %}

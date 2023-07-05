@@ -1,0 +1,73 @@
+{% extends 'shared.html' %}
+{% load static %}
+{% block title %}Candidate Dashboard{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+      <li class="breadcrumb-item">
+        <a href="{% url 'accounts:redirect_logged' %}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">Candidate Dashboard</li>
+    </ol>
+  </nav>
+  <div class="row">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible col-md-12" role="alert">
+      <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+      </button>
+      {{ message }}
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="col-md-3">
+    <div class="card mb-3">
+      <div class="card-body">
+        <i class="menu-icon tf-icons bx bx-user-plus c-font-size"></i>
+        <br>
+        <h5 class="card-title">Study Buddies</h5>  
+        <a href="#">
+          <button type="button" class="btn btn-xs btn-primary">
+            <span class="tf-icons bx bx-right-arrow-alt"></span>&nbsp; VIEW
+          </button>
+        </a> 
+       
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card mb-3">
+      <div class="card-body">
+        <i class="menu-icon tf-icons bx bx-box c-font-size"></i>
+        <br>
+        <h5 class="card-title">Stations</h5>  
+        <a href="#">
+          <button type="button" class="btn btn-xs btn-primary">
+            <span class="tf-icons bx bx-right-arrow-alt"></span>&nbsp; VIEW
+          </button>
+        </a> 
+       
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card mb-3">
+      <div class="card-body">
+        <i class="menu-icon tf-icons bx bx-group c-font-size"></i>
+        <br>
+        <h5 class="card-title">Coaches</h5>  
+        <a href="#">
+          <button type="button" class="btn btn-xs btn-primary">
+            <span class="tf-icons bx bx-right-arrow-alt"></span>&nbsp; VIEW
+          </button>
+        </a> 
+       
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+{% endblock %}
