@@ -334,22 +334,26 @@ def save_candidate_data(request):
 @login_required
 def redirect_logged(request):
     user = request.user
+    print('entry')
     if not user.is_admin:
         if not user.is_registration_complete:
+            print('registration incomplete')
             return redirect('accounts:handle_form_displays',1)
         elif user.is_registration_complete and not user.is_coach_accepted:
+            print('registration complete but not accepted')
             return redirect('accounts:coach_application_preview')
-        elif user.is_registration_complete and user.is_coach_accepted:
-            return dash_board_redirect(user)
         else:
-            pass
+            print('registration complete and accepted')
+            return dash_board_redirect(user)
+    print('for admin')
     return redirect('accounts:admin_dashboard')
 
 
 @login_required  
 def coach_application_preview(request):
     template_name = 'coach_application_preview.html'
-    return render(request, template_name)
+
+    return render(request, template_name, {'full_name':""})
 
 @login_required  
 def candidate_dashboard(request):

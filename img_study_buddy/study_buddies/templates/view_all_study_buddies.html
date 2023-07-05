@@ -12,33 +12,129 @@
   </div>
   {% endfor %}
   {% endif %}
+  <div class="row mb-3">
+    <form action="" method="post" style="max-width:100%;">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="mb-3">
+            <label for="time_zone" class="form-label">Time Zone</label>
+            <select id="time_zone" class="form-select" name="time_zone">
+              <option>All Time Zones</option>
+              <option value="1">Test</option>
+              <option value="2">Test</option>
+              <option value="3">Test</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div id="exam_date" class="mb-3">
+            <label for="exam_date" class="form-label"> Exam Date</label>
+            <input type="date"  name="exam_date" class="datepicker dateinput form-control" data-date-format="YYYY-MM-DD"  id="exam_date">
+        </div>
+        </div>
+        <div class="col-md-3">
+          <div class="mb-3">
+            <label for="availability" class="form-label">Availability</label>
+            <select id="availability" class="form-select" name="availability">
+              <option>All Availability</option>
+              <option value="1">Test</option>
+              <option value="2">Test</option>
+              <option value="3">Test</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="mb-3">
+            <label for="availability" class="form-label">Online Status</label>
+            <select id="availability" class="form-select" name="availability">
+              <option>Online & Offline</option>
+              <option value="1">Online</option>
+              <option value="2">Offline</option>
+            </select>
+          </div>
+        </div>
+        <!-- <div class="col-md-2">
+          
+          <button type="button" class="btn btn-primary">
+           Find <span class="tf-icons bx bx-search-alt me-1"></span>
+          </button>
+        </div> -->
+      
+      </div>
+          
+        </form>
+  </div>
+  <div class="row mb-5">
+    <div class="col-md-12">
+     
+      <h1 class="display-6 mb-0" style="color:#0080FF;">{{candidates}} candidates available..</h1>
+    </div>
+  </div>
 {% for item in obj %}
   <div class="row mb-5">
+ 
     <div class="col-md">
       <div class="card mb-3">
         <div class="row g-0">
-          <div class="col-md-4">
-  
-            <img class="card-img card-img-left" src="{{item.user_general_additional_info.profile_picture.url}}" alt="{{item.get_full_name}}">
+          <div class="col-md-3">
+            <img class="card-img card-img-left" src="{{item.user_general_additional_info.profile_picture.url}}" alt="{{item.get_full_name}}" style="height:250px;width:100%;object-fit:cover; object-position: 100% 0;">
           </div>
-          <div class="col-md-8">
+          <div class="col-md-9">
             <div class="card-body">
               <h5 class="card-title">{{item.get_full_name|title}}</h5>
               <div class="row">
                 <div class="col-md-4">Time Zone : {{item.user_general_additional_info.time_zone}} </div>
-                <div class="col-md-4">Availability:  {{item.user_candidate_additional_info.availability}}</div>
+                <div class="col-md-4">Availability:  {{item.user_candidate_additional_info.availability}} hrs/day</div>
                 <div class="col-md-4">Exam Date: {{item.user_candidate_additional_info.exam_date}} </div>
               </div>
-            <div class="row">
-              
+            <div class="row mt-3">
+              <div class="col-md-4 col-xl-4">
+                <div class="card shadow-none bg-transparent border border-info mb-3">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">3</h5>
+                    <p class="card-text"><a href="">Meetings</a> </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-xl-4">
+                <div class="card shadow-none bg-transparent border border-info mb-3">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">100%</h5>
+                    <p class="card-text"><a href="">Reliability</a> </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-xl-4">
+                <div class="card shadow-none bg-transparent border border-info mb-3">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">⭐⭐⭐⭐⭐ 4.5</h5>
+                    <p class="card-text"><a href="">Reviews</a></p>
+                  </div>
+                </div>
+              </div>
             </div>
-              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
   {% endfor %}
+  <div class="pagination">
+    <span class="step-links">
+        {% if obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ obj.number }} of {{ obj.paginator.num_pages }}.
+        </span>
+
+        {% if obj.has_next %}
+            <a href="?page={{ obj.next_page_number }}">next</a>
+            <a href="?page={{ obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}
