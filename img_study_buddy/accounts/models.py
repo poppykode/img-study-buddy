@@ -25,9 +25,9 @@ class GeneralAdditionalInfo(models.Model):
             )
     user=models.OneToOneField(User,related_name='user_general_additional_info', on_delete=CASCADE)
     gender = models.CharField(max_length=50,choices=GENDER)
-    time_zone = models.CharField(max_length=255,choices=[(x,x) for x in pytz.common_timezones])
+    time_zone = models.CharField(max_length=255,choices=[(x,x) for x in pytz.all_timezones_set])
     phone_number = models.CharField(max_length=255, null=True,blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures', null=True,blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures')
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 

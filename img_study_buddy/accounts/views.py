@@ -89,16 +89,22 @@ def handle_sessions_forward(request,form_number):
     filename = ''
     profile_picture_ = ''
     if form_number == 1:
-        profile_picture=request.FILES.get('profile_picture') 
+
+        profile_picture=request.FILES.get('profile_picture')
+        print('_____')
+        print(profile_picture)
+        print(type(profile_picture))
+        print('_____')
         fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT,settings.PROFILE_PICTURES))
         if not profile_picture == None:            
             filename = fs.save(profile_picture.name, profile_picture.file)
             profile_picture_=settings.PROFILE_PICTURES +'/'+filename
         else:
+            print('if none this runs')
             filename = request.POST.get('filename')
             profile_picture_ = request.POST.get('profile_picture_1')
-        if not request.session.get(session_key,None) == None :
-            delete_a_file(request,session_key,fs,form_number)
+        # if not request.session.get(session_key,None) == None :
+        #     delete_a_file(request,session_key,fs,form_number)
         general_info_ =  {
             'gender':request.POST.get('gender'),
             'time_zone':request.POST.get('time_zone'),
@@ -136,8 +142,6 @@ def handle_sessions_forward(request,form_number):
             )
         request.session[settings.EDUCATION_INFO]=serialise_(education_info_)
         #next button
-        print('__________')
-        print(deserialise_(request.session[settings.EDUCATION_INFO]))
         return redirect('accounts:handle_form_displays',(form_number+1))
     elif form_number == 4:
         work_experienceForm_info_ = [
