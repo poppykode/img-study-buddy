@@ -37,7 +37,7 @@ urlpatterns = [
     path(uuid.uuid4().hex,login_required(views.RegCoachWizard.as_view(coach_reg_forms)), name='reg_wiz_coach'),
     path(uuid.uuid4().hex,login_required(views.RegCandidateWizard.as_view(candidate_reg_forms)), name='reg_wiz_candidate'),
     path('coach-application-preview',views.coach_application_preview, name='coach_application_preview'),
-    path(uuid.uuid4().hex,views.profile, name='profile'),
-    path(uuid.uuid4().hex+'<int:user_id>',views.public_profile,name='public_profile')
+    path('profile',views.profile, name='profile'),
+    path('public-profile/<int:user_id>',views.public_profile,name='public_profile')
 
 ]

@@ -2,6 +2,8 @@ import pytz
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.deletion import CASCADE
+from review_ratings.models import ReviewRating
+from django.db.models import Avg, Count
 
 # Create your models here.
 class User (AbstractUser):
@@ -16,6 +18,21 @@ class User (AbstractUser):
 
     class Meta:
         ordering = ["-date_joined", ]
+
+    def averageReview(self):
+        reviews = ReviewRating.objects.filter(user_rated=self, status=True).aggregate(average=Avg('rating'))
+        avg = 0
+        if reviews['average'] is not None:
+            avg = float(reviews['average'])
+        return avg
+
+    def countReview(self):
+        reviews = ReviewRating.objects.filter(user_rated=self).aggregate(count=Count('id'))
+        count = 0
+        if reviews['count'] is not None:
+            count = int(reviews['count'])
+        return count
+
         
 class GeneralAdditionalInfo(models.Model):
     GENDER=(('','select a gender'),
