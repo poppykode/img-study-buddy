@@ -1,0 +1,68 @@
+{% extends 'shared.html' %}
+{% load static %}
+{% block title %}{{obj.get_full_name}}{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+      <li class="breadcrumb-item">
+        <a href="{% url 'accounts:redirect_logged' %}">Home</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'study_buddies:view_all_study_buddies' %}">Study Buddies</a>
+      </li>
+      <li class="breadcrumb-item active">{{obj.get_full_name}}</li>
+    </ol>
+</nav>
+<div class="row">
+    <div class="col-md">
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-3">
+              <img class="card-img card-img-left" src="{{obj.user_general_additional_info.profile_picture.url}}" alt="{{obj.get_full_name}}" style="height:260px;width:100%;object-fit:cover; object-position: 100% 0;">
+            </div>
+            <div class="col-md-9">
+                <div class="card-body">
+                    <h5 class="card-title">{{obj.get_full_name|title}}</h5>
+                    <a href="javascript:void(0)" class="btn btn-primary">Propose Meeting</a>
+             
+                    <div class="row mt-3">
+                      <div class="col-md-4">Time Zone : {{obj.user_general_additional_info.time_zone}} </div>
+                      <div class="col-md-4">Availability: {{obj.user_candidate_additional_info.availability}} hrs/day</div>
+                      <div class="col-md-4">Exam Date: {{obj.user_candidate_additional_info.exam_date}} </div>
+                    </div>
+                  <div class="row mt-3">
+                    <div class="col-md-4 col-xl-4">
+                      <div class="card shadow-none bg-transparent border border-info mb-3">
+                        <div class="card-body text-center">
+                          <h5 class="card-title">3</h5>
+                          <p class="card-text"><a href="">Meetings</a> </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-xl-4">
+                      <div class="card shadow-none bg-transparent border border-info mb-3">
+                        <div class="card-body text-center">
+                          <h5 class="card-title">100%</h5>
+                          <p class="card-text"><a href="">Reliability</a> </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-xl-4">
+                      <div class="card shadow-none bg-transparent border border-info mb-3">
+                        <div class="card-body text-center">
+                          <h5 class="card-title">⭐⭐⭐⭐⭐ 4.5</h5>
+                          <p class="card-text"><a href="">Reviews</a></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                
+            </div>
+        
+          </div>
+        </div>
+      </div>
+</div>
+
+{% endblock %}

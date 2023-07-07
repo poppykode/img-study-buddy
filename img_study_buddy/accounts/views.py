@@ -89,12 +89,7 @@ def handle_sessions_forward(request,form_number):
     filename = ''
     profile_picture_ = ''
     if form_number == 1:
-
         profile_picture=request.FILES.get('profile_picture')
-        print('_____')
-        print(profile_picture)
-        print(type(profile_picture))
-        print('_____')
         fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT,settings.PROFILE_PICTURES))
         if not profile_picture == None:            
             filename = fs.save(profile_picture.name, profile_picture.file)
@@ -352,7 +347,6 @@ def redirect_logged(request):
     print('for admin')
     return redirect('accounts:admin_dashboard')
 
-
 @login_required  
 def coach_application_preview(request):
     template_name = 'coach_application_preview.html'
@@ -428,4 +422,11 @@ def profile(request):
     template_name =  'registration/profile.html'
     user_qs = get_object_or_404(models.User, pk=request.user.pk)
     return render(request,template_name, {'obj':user_qs})
+
+@login_required
+def public_profile(request,user_id):
+    template_name =  'registration/public_profile.html'
+    user_qs = get_object_or_404(models.User, pk=user_id)
+    return render(request,template_name, {'obj':user_qs})
+
 
