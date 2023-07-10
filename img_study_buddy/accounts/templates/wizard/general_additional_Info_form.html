@@ -17,11 +17,22 @@
               
                 <div class="mb-3">
                   {% if request.session.general_info %}
-                    <input type="hidden" value="{{img}}" name="profile_picture_1">
+                    <!-- <input type="hidden" value="{{img}}" name="profile_picture_1">
                     <input type="hidden" value="{{name}}" name="filename">
-                   <a href="">{{name}}</a>
+                   <a href="">{{name}}</a> -->
+                    <div id="div_id_profile_picture" class="mb-3">
+                    <label for="id_profile_picture" class="form-label requiredField">Profile picture<span class="asteriskField">*</span></label>
+                    
+                    <p><small class="mb-2 mt-2"><a href="#">{{name}}</a></small></p>
+                    <div>
+                      <input type="hidden" value="{{name}}" name="filename">
+                       <input type="hidden" value="{{img}}" name="profile_picture_1">
+                      <input type="file"  name="profile_picture" class="form-control" accept="image/*" id="id_profile_picture"> 
+                    </div>     
+                    </div>
+                    {% else %}
+                        {{ form.profile_picture|as_crispy_field }}
                     {% endif %}
-                    {{ form.profile_picture|as_crispy_field }}
                   </div>
                   <div class="mb-3">
                     {{form.time_zone|as_crispy_field}}

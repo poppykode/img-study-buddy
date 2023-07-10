@@ -28,6 +28,7 @@ urlpatterns = [
     path('corporate', include('corporate.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('study-buddies/', include('study_buddies.urls')),
+    path('raviews-and-ratings/', include('review_ratings.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

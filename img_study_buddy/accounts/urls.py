@@ -21,7 +21,9 @@ candidate_reg_forms = [
     forms.CandidateAdditionalInfoForm
 ]
 
+
 urlpatterns = [
+  
     path('',views.login, name='login'),
     path('coach-dashboard',views.coach_dashboard,name='coach_dashboard'),
     path('admin-dashboard',views.admin_dashboard,name='admin_dashboard'),
@@ -36,5 +38,6 @@ urlpatterns = [
     path('{{uuid.uuid4().hex}}',login_required(views.RegCandidateWizard.as_view(candidate_reg_forms)), name='reg_wiz_candidate'),
     path('coach-application-preview',views.coach_application_preview, name='coach_application_preview'),
     path('profile',views.profile, name='profile'),
+    path('public-profile/<int:user_id>',views.public_profile,name='public_profile')
 
 ]

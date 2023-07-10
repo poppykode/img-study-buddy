@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'accounts',
     'corporate',
     'study_buddies',
+    'review_ratings',
     #3rd Part Apps
     'formtools',
     'crispy_forms',
