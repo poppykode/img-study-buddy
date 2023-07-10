@@ -12,6 +12,9 @@ class CandidateAdditionalInfoForm(forms.ModelForm):
         widgets = {
             'exam_date': forms.widgets.DateInput(attrs={'class': 'datepicker', 'data-date-format': 'YYYY-MM-DD', 'type': 'date'}),
         }
+        labels = {
+            'availability':'Availability (hrs/day)'
+        }
 
         fields = ('exam_date','availability',)
 

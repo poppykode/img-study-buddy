@@ -1,6 +1,8 @@
 import json
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+from django.core.paginator import Paginator
 from accounts.models import User
+
 def has_session(request,session_key):
     if session_key in request.session:
         return True
@@ -36,5 +38,16 @@ def complete_registration(request,keys):
     user.is_registration_complete = True
     user.is_coach_accepted = is_coach_accepted
     user.save()
+
+def dash_board_redirect(user):
+    if user.is_coach:
+        return redirect('accounts:coach_dashboard')
+    return  redirect('accounts:candidate_dashboard')
+
+def pagination_qs(request,qs):
+    paginator = Paginator(qs, 25)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return page_obj
 
 
