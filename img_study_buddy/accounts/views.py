@@ -172,6 +172,7 @@ def handle_sessions_forward(request,form_number):
         coach_info_ = {
             'cv':cv_url,
             'nhs_experience':request.POST.get('nhs_experience'),
+            'rate':request.POST.get('rate'),
         }
     
         request.session[settings.COACH_INFO]=serialise_(coach_info_)
@@ -188,7 +189,6 @@ def handle_form_displays(request,form_number):
         key = settings.GENERAL_INFO
         if has_session(request,key):
             general_info_=deserialise_(request.session[key])
-            print(general_info_)
             form = forms.GeneralAdditionalInfoForm(initial=general_info_)
             img = general_info_['profile_picture']
             name = general_info_['profile_picture_name']
@@ -309,7 +309,8 @@ def save_coach_data(request):
     models.CoachAdditionalInfo.objects.create(
         user = user,
         cv =coach_info['cv'],
-        nhs_experience =coach_info['nhs_experience'] ,
+        nhs_experience =coach_info['nhs_experience'],
+        rate = coach_info['rate'],
     )
     complete_registration(request,settings.KEYS)
     return redirect('accounts:redirect_logged')
@@ -383,6 +384,8 @@ def login(request):
             messages.success(request, 'You have successfully logged in.')
             return redirect(reverse('accounts:redirect_logged'))
         messages.error(request, 'Invalid username or password.')
+    print("port number")
+    print(request.META['SERVER_PORT']) 
     return render(request, template_name)
 
 def register(request):

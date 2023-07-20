@@ -39,7 +39,7 @@ SECRET_KEY = 'django-insecure-0yh2dg2f6hmoug$w_pqyxv_w@^-7vpr^)5yb+b$t&@(gn!i_i9
 DEBUG = True
 
 # ALLOWED_HOSTS = ['8efc-41-190-33-50.ngrok-free.app']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -55,11 +55,13 @@ INSTALLED_APPS = [
     'corporate',
     'study_buddies',
     'review_ratings',
+    'coaches',
     #3rd Part Apps
     'formtools',
     'crispy_forms',
     'crispy_bootstrap5',
     'django_quill',
+    
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
@@ -114,6 +116,17 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'img_db',
+#         'USER': 'root',
+#         'PASSWORD': 'root',
+#         'HOST': 'mysqldb',
+#         'PORT': '3306',
+#     }
+# }
 #USER DEFINED CONSTANTS
 
 PROFILE_PICTURES='profile_pictures'

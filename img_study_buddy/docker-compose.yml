@@ -1,14 +1,14 @@
 version: '3'
 services:
   db:
-    image: mysql:8
+    image: mysql:5.7
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_DATABASE='mydatabase'
+      - MYSQL_DATABASE='img_db'
       - MYSQL_USER='root'
-      - MYSQL_PASSWORD='some_password'
-      - MYSQL_ROOT_PASSWORD='some_password'
+      - MYSQL_PASSWORD='root'
+      - MYSQL_ROOT_PASSWORD='root'
       - MYSQL_HOST=''
     volumes:
       - /tmp/app/mysqld:/var/run/mysqld

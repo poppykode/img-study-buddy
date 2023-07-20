@@ -1,6 +1,7 @@
-FROM python:3.11
+FROM python:3.10
 ENV PYTHONUNBUFFERED 1
 WORKDIR /app
-COPY requirements.txt /app/
+# COPY requirements.txt /app
+COPY . /app
 RUN pip install -r requirements.txt
-COPY . /app/
+ENTRYPOINT [ "sh","entrypoint.sh" ]

@@ -50,7 +50,8 @@ class CoachAdditionalInfoForm(forms.ModelForm):
     class Meta:
         labels={
             'nhs_experience':'NHS Experience(months)',
-            'cv':'Upload your CV'
+            'cv':'Upload your CV',
+            'rate':'Rate/hour'
             }
         model = models.CoachAdditionalInfo
-        fields = ('cv','nhs_experience')
+        fields = ('rate','cv','nhs_experience')

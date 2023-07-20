@@ -113,6 +113,7 @@ class CoachAdditionalInfo(models.Model):
     user=models.OneToOneField(User,related_name='user_coach_additional_info', on_delete=CASCADE)
     cv = models.FileField(upload_to='files')
     nhs_experience = models.CharField(max_length=255)
+    rate = models.FloatField(default=0.0)
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
