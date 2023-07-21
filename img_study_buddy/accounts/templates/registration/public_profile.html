@@ -8,7 +8,11 @@
         <a href="{% url 'accounts:redirect_logged' %}">Home</a>
       </li>
       <li class="breadcrumb-item">
-        <a href="{% url 'study_buddies:view_all_study_buddies' %}">Study Buddies</a>
+        {% if obj.is_candidate %}
+          <a href="{% url 'study_buddies:view_all_study_buddies' %}">Study Buddies</a>
+        {% else %}
+          <a href="{% url 'coaches:view_all_coaches' %}">Coaches</a>
+        {% endif %}
       </li>
       <li class="breadcrumb-item active">{{obj.get_full_name}}</li>
     </ol>
@@ -34,11 +38,22 @@
             <div class="col-md-9">
                 <div class="card-body">
                     <h5 class="card-title">{{obj.get_full_name|title}}</h5>
-                    <a href="#" class="btn btn-primary">Propose Meeting</a>
+                    <a href="#" class="btn btn-primary">
+                      {% if request.user.is_candidate %}
+                      Propose Meeting
+                      {% else %}
+                      Book Session
+                      {% endif %}
+                    </a>
                     <div class="row mt-3">
                       <div class="col-md-4">Time Zone : {{obj.user_general_additional_info.time_zone}} </div>
+                      {% if request.user.is_candidate %}
                       <div class="col-md-4">Availability: {{obj.user_candidate_additional_info.availability}} hrs/day</div>
                       <div class="col-md-4">Exam Date: {{obj.user_candidate_additional_info.exam_date}} </div>
+                      {% else %}
+                      <div class="col-md-4">Rate : {{obj.user_coach_additional_info.rate}} /hr</div>
+                      <div class="col-md-4">Nhs Experience: {{obj.user_coach_additional_info.nhs_experience}} years</div>
+                      {% endif %}
                     </div>
                   <div class="row mt-3">
                     <div class="col-md-4 col-xl-4">
@@ -70,7 +85,15 @@
                   </div>
                   </div>
             </div>
-            
+            <!-- Motivations -->
+            {% if obj.is_coach %}
+            <div class="col-md-12">
+              <div class="card-body">
+                <p class="card-text">{{obj.user_motivation.description|title}}</p>
+            </div>
+            </div>
+            <hr>
+          {% endif %}
             <div class="col-md-12">
               <div class="card-body">
                 <h3 class="mb-5">{{obj.countReview}} Reviews</h3>

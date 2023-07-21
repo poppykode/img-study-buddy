@@ -11,31 +11,32 @@ from img_study_buddy.utils import (
 @login_required
 def view_all_coaches(request):
     template_name = 'view_all_coaches.html'
+    # coaches_qs =  User.objects.filter(is_coach = True,is_registration_complete=True,is_coach_accepted=True).exclude(id=request.user.id)
     coaches_qs =  User.objects.filter(is_coach = True,is_registration_complete=True).exclude(id=request.user.id)
     final_qs = ''
     time_zones = pytz.all_timezones_set
     if request.method== 'POST':
         time_zone = request.POST.get('time_zone_')
-        ratings = request.POST.get('ratings')
+        avg_rating = request.POST.get('avg_rating')
         budget = request.POST.get('budget')
         if time_zone == '':
             time_zone = None
-        if ratings == '':
-            ratings = None
+        if avg_rating == '':
+            avg_rating = None
         if budget == '':
             budget = None
         final_qs= coaches_qs.filter(
-            Q(user_rated_review__rating =ratings)|
+            Q(user_avg_rating =avg_rating)|
             Q (user_general_additional_info__time_zone=time_zone)|
-            Q(user_coach_additional_info__=budget)
+            Q(user_coach_additional_info__rate=budget)
         )
         context = {
             'obj':pagination_qs(request,final_qs),
-            'candidates':len(final_qs),
+            'coaches':len(final_qs),
             'time_zones':time_zones,
             'time_zone':time_zone,
             'budget':budget,
-            'ratings': ratings,
+            'avg_rating': avg_rating,
             'type':1
         }
 
@@ -43,12 +44,11 @@ def view_all_coaches(request):
     final_qs = coaches_qs
     context = {
         'obj':pagination_qs(request,final_qs),
-        'candidates':len(final_qs),
+        'coaches':len(final_qs),
         'time_zones':time_zones,
         'time_zone':'',
-        'exam_date':'',
-        'availability':'',
-        'online_offline':'',
+        'budget':'',
+        'avg_rating': '',
         'type':2
     }
     return render(request,template_name,context)
