@@ -4,7 +4,7 @@ import base64
 from formtools.wizard.views import SessionWizardView
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect,get_object_or_404, get_list_or_404
 from django.contrib import auth
 from django.urls import reverse
 from django.contrib import messages
@@ -429,7 +429,14 @@ def profile(request):
 @login_required
 def public_profile(request,user_id):
     template_name =  'registration/public_profile.html'
-    user_qs = get_object_or_404(models.User, pk=user_id)
+    user_qs = get_object_or_404(models.User, user_id=user_id)
     return render(request,template_name, {'obj':user_qs})
+
+@login_required
+def users(request):
+    template_name =  'registration/users.html'
+    user_qs = get_list_or_404(User)
+    return render(request,template_name, {'obj':user_qs})
+
 
 

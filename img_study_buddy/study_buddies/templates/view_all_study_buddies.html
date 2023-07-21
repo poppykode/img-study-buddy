@@ -91,7 +91,7 @@
       <div class="card mb-3">
         <div class="row g-0">
           <div class="col-md-3">
-            <a href="{% url 'accounts:public_profile' item.pk %}">
+            <a href="{% url 'accounts:public_profile' item.user_id %}">
             <img class="card-img card-img-left" src="{{item.user_general_additional_info.profile_picture.url}}" alt="{{item.get_full_name}}" style="height:250px;width:100%;object-fit:cover; object-position: 100% 0;">
           </a>
           </div>

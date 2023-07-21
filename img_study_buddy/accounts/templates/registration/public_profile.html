@@ -39,7 +39,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{obj.get_full_name|title}}</h5>
                     <a href="#" class="btn btn-primary">
-                      {% if request.user.is_candidate %}
+                      {% if obj.is_candidate %}
                       Propose Meeting
                       {% else %}
                       Book Session
@@ -47,7 +47,7 @@
                     </a>
                     <div class="row mt-3">
                       <div class="col-md-4">Time Zone : {{obj.user_general_additional_info.time_zone}} </div>
-                      {% if request.user.is_candidate %}
+                      {% if obj.is_candidate %}
                       <div class="col-md-4">Availability: {{obj.user_candidate_additional_info.availability}} hrs/day</div>
                       <div class="col-md-4">Exam Date: {{obj.user_candidate_additional_info.exam_date}} </div>
                       {% else %}

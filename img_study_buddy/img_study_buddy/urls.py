@@ -29,6 +29,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('study-buddies/', include('study_buddies.urls')),
     path('coaches/', include('coaches.urls')),
+    path('meetings/', include('meetings.urls')),
     path('raviews-and-ratings/', include('review_ratings.urls')),
 ]
 if settings.DEBUG:

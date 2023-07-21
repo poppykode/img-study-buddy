@@ -1,4 +1,5 @@
 import pytz
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.deletion import CASCADE
@@ -7,6 +8,7 @@ from django.db.models import Avg, Count
 
 # Create your models here.
 class User (AbstractUser):
+    user_id = models.UUIDField(unique=True,default=uuid.uuid4)
     is_candidate = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_coach = models.BooleanField(default=False)

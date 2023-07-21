@@ -38,6 +38,7 @@ urlpatterns = [
     path('{{uuid.uuid4().hex}}',login_required(views.RegCandidateWizard.as_view(candidate_reg_forms)), name='reg_wiz_candidate'),
     path('coach-application-preview',views.coach_application_preview, name='coach_application_preview'),
     path('profile',views.profile, name='profile'),
-    path('public-profile/<int:user_id>',views.public_profile,name='public_profile')
+    path('public-profile/<uuid:user_id>',views.public_profile,name='public_profile'),
+    path('users',views.users, name='users')
 
 ]
