@@ -12,10 +12,12 @@
   </nav>
   {% if messages %}
   {% for message in messages %}
+
   <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+    {{ message }}
       <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
       </button>
-      {{ message }}
+     
   </div>
   {% endfor %}
   {% endif %}

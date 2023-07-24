@@ -13,6 +13,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.serializers.json import DjangoJSONEncoder
 
+
 from img_study_buddy.utils import (
     has_session,
     delete_a_file,
@@ -23,6 +24,7 @@ from img_study_buddy.utils import (
     
 ) 
 from . import forms
+from meetings import forms as f
 from accounts.models import User
 from . import models
 
@@ -429,8 +431,9 @@ def profile(request):
 @login_required
 def public_profile(request,user_id):
     template_name =  'registration/public_profile.html'
-    user_qs = get_object_or_404(models.User, user_id=user_id)
-    return render(request,template_name, {'obj':user_qs})
+    user_qs = get_object_or_404(models.User, id=user_id)
+    form = f.MeetingForm()
+    return render(request,template_name, {'obj':user_qs,'form':form})
 
 @login_required
 def users(request):

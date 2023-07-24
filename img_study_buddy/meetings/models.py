@@ -8,10 +8,9 @@ User = settings.AUTH_USER_MODEL
 class Meeting(models.Model):
     requester = models.ForeignKey(User, on_delete=models.CASCADE,related_name='meeting_requester')
     requested = models.ForeignKey(User, on_delete=models.CASCADE,related_name='meeting_requested')
-    station = models.CharField(max_length=255)
     date = models.DateField()
     time = models.TimeField()
-    Remarks = models.TextField()
+    remarks = models.TextField(null=True, blank=True)
     requested_has_accepted = models.BooleanField(default=False)
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)

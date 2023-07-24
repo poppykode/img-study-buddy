@@ -1,5 +1,6 @@
 {% extends 'shared.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block title %}{{obj.get_full_name}}{% endblock %}
 {% block content %}
 <nav aria-label="breadcrumb">
@@ -38,13 +39,19 @@
             <div class="col-md-9">
                 <div class="card-body">
                     <h5 class="card-title">{{obj.get_full_name|title}}</h5>
-                    <a href="#" class="btn btn-primary">
-                      {% if obj.is_candidate %}
-                      Propose Meeting
-                      {% else %}
-                      Book Session
-                      {% endif %}
-                    </a>
+                    <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#basicModal"
+                  >
+                  {% if obj.is_candidate %}
+                  Propose Meeting
+                  {% else %}
+                  Book Session
+                  {% endif %}
+                  </button>
+
                     <div class="row mt-3">
                       <div class="col-md-4">Time Zone : {{obj.user_general_additional_info.time_zone}} </div>
                       {% if obj.is_candidate %}
@@ -171,6 +178,47 @@
           </div>
         </div>
       </div>
+</div>
+
+ <!-- Modal -->
+ <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">Propose meeting with {{obj.get_full_name|title}}</h5>
+        <hr>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'meetings:create_a_meeting' obj.id %}" method="POST">
+          {% csrf_token %}
+          
+          <div class="mb-3">    
+            {{ form.date|as_crispy_field }}
+          </div>
+          <div class="mb-3">    
+            {{ form.time|as_crispy_field }}
+          </div>
+          <div class="mb-3">    
+            {{ form.remarks|as_crispy_field }}
+          </div>
+      
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" class="btn btn-primary">Send Proposal</button>
+      </div>
+    </form>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
