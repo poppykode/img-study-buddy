@@ -39,6 +39,10 @@ urlpatterns = [
     path('coach-application-preview',views.coach_application_preview, name='coach_application_preview'),
     path('profile',views.profile, name='profile'),
     path('public-profile/<uuid:user_id>',views.public_profile,name='public_profile'),
-    path('users',views.users, name='users')
+    path('users',views.users, name='users'),
+    path('admin-profile/<uuid:coach_id>',views.admin_profile, name='admin_profile'),
+    path('accept-or-reject_application/<uuid:coach_id>/<str:status>',views.accept_or_reject_application, name='accept_or_reject_application'),
+    path('activate-or-deactivate_account/<uuid:user_id>',views.activate_or_deactivate_account, name='activate_or_deactivate_account'),
 
 ]
+

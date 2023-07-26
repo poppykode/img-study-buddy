@@ -8,12 +8,15 @@ from django.db.models import Avg, Count
 
 # Create your models here.
 class User (AbstractUser):
+    PENDING ='pending'
+    STATUS = (('accepted','Accepted'),('rejected','Rejected'),(PENDING,'Pending'))
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     is_candidate = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_coach = models.BooleanField(default=False)
     is_registration_complete = models.BooleanField(default=False)
     is_coach_accepted = models.BooleanField(default=True)
+    account_status = models.CharField(max_length=10,choices=STATUS,default=PENDING)
 
     def __str__(self):
         return self.first_name.capitalize() + ' ' + self.last_name.capitalize() + ' | ' + str(self.email)
@@ -43,7 +46,7 @@ class GeneralAdditionalInfo(models.Model):
             ('diversity','Diversity')
             )
     user=models.OneToOneField(User,related_name='user_general_additional_info', on_delete=CASCADE)
-    gender = models.CharField(max_length=50,choices=GENDER)
+    gender = models.CharField(max_length=10,choices=GENDER)
     time_zone = models.CharField(max_length=255,choices=[(x,x) for x in pytz.all_timezones_set])
     phone_number = models.CharField(max_length=255, null=True,blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures')

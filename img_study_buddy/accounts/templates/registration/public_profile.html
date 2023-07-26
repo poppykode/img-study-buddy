@@ -15,7 +15,7 @@
           <a href="{% url 'coaches:view_all_coaches' %}">Coaches</a>
         {% endif %}
       </li>
-      <li class="breadcrumb-item active">{{obj.get_full_name}}</li>
+      <li class="breadcrumb-item active">{{obj.get_full_name|title}}</li>
     </ol>
 </nav>
 <div class="row">

@@ -50,8 +50,11 @@ class CoachAdditionalInfoForm(forms.ModelForm):
     class Meta:
         labels={
             'nhs_experience':'NHS Experience(months)',
-            'cv':'Upload your CV',
+            'cv':'Upload your CV (PDF Format)',
             'rate':'Rate/hour'
+            }
+        widgets = {
+            'cv': forms.FileInput(attrs={'accept': 'application/pdf'})
             }
         model = models.CoachAdditionalInfo
         fields = ('rate','cv','nhs_experience')

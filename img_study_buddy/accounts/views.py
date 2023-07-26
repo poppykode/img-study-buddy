@@ -341,7 +341,7 @@ def redirect_logged(request):
         if not user.is_registration_complete:
             print('registration incomplete')
             return redirect('accounts:handle_form_displays',1)
-        elif user.is_registration_complete and not user.is_coach_accepted:
+        elif user.is_registration_complete and user.account_status =='pending':
             print('registration complete but not accepted')
             return redirect('accounts:coach_application_preview')
         else:
@@ -396,14 +396,21 @@ def register(request):
     password = request.POST.get('password','')
     role = request.POST.get('role')
     if request.method == 'POST':
+        exists = User.objects.filter(username = username).exists()
+        if exists:
+            messages.error(request, 'A user with that email address already exists.')
+            return render(request, template_name)
         is_candidate = False
         is_coach = False
         is_coach_accepted = False
+        account_status = ''
         if role == 'candidate':
             is_candidate = True
             is_coach_accepted = True
+            account_status = 'accepted'
         else:
             is_coach = True
+            account_status = 'pending'
         new_user = User.objects.create(
             username=username,
             first_name = request.POST.get('first_name'),
@@ -411,7 +418,8 @@ def register(request):
             email=username,
             is_candidate = is_candidate,
             is_coach = is_coach,
-            is_coach_accepted = is_coach_accepted
+            is_coach_accepted = is_coach_accepted,
+            account_status = account_status
         )
         new_user.set_password(password)
         new_user.save()
@@ -438,8 +446,42 @@ def public_profile(request,user_id):
 @login_required
 def users(request):
     template_name =  'registration/users.html'
-    user_qs = get_list_or_404(User)
-    return render(request,template_name, {'obj':user_qs})
+    user_qs = models.User.objects.filter(is_registration_complete=True).exclude(id=request.user.id)
+    return render(request,template_name, {'users':user_qs})
 
+@login_required
+def admin_profile(request,coach_id):
+    template_name =  'registration/admin_profile.html'
+    coach_qs = get_object_or_404(models.User,id=coach_id)
+    return render(request,template_name, {'obj':coach_qs})
+
+@login_required
+def accept_or_reject_application(request,coach_id,status):
+    coach_qs = get_object_or_404(models.User,id=coach_id)
+    is_coach_accepted = False
+    if status =='accepted':
+        is_coach_accepted = True
+    coach_qs.is_coach_accepted = is_coach_accepted
+    coach_qs.account_status = status
+    coach_qs.save()
+    #send_email
+    messages.success(request,'Application has been successfully '+status+' an email notification will be sent to '+coach_qs.get_full_name())
+    return redirect('accounts:admin_profile',coach_id)
+
+@login_required
+def activate_or_deactivate_account(request,user_id):
+    user = get_object_or_404(User,id=user_id)
+    is_active =''
+    msg = ''
+    if user.is_active:
+        is_active = False
+        msg='deactivated'
+    else:
+        is_active=True
+        msg='activated'
+    user.is_active = is_active
+    user.save()
+    messages.success(request,'Account has been successfully '+msg)
+    return redirect('accounts:users')
 
 

@@ -11,8 +11,7 @@ from img_study_buddy.utils import (
 @login_required
 def view_all_coaches(request):
     template_name = 'view_all_coaches.html'
-    # coaches_qs =  User.objects.filter(is_coach = True,is_registration_complete=True,is_coach_accepted=True).exclude(id=request.user.id)
-    coaches_qs =  User.objects.filter(is_coach = True,is_registration_complete=True).exclude(id=request.user.id)
+    coaches_qs =  User.objects.filter(is_coach = True,is_registration_complete=True).exclude(id=request.user.id,account_status='accepted')
     final_qs = ''
     time_zones = pytz.all_timezones_set
     if request.method== 'POST':
