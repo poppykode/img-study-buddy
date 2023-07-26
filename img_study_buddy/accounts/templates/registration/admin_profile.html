@@ -16,9 +16,14 @@
 </nav>
 <div class="row">
   <div class="col-md-3">
-    <img class="card-img card-img-left" src="{{obj.user_general_additional_info.profile_picture.url}}"
-      alt="{{obj.get_full_name}}" style="height:250px;width:100%;object-fit:cover; object-position: 100% 0;">
-  </div>
+    {% if obj.user_general_additional_info.profile_picture %}
+    <img class="card-img card-img-left img-image" src="{{obj.user_general_additional_info.profile_picture.url}}"
+      alt="{{obj.get_full_name}}">
+ {% else %}
+ <img class="card-img card-img-left img-image" src="{% static 'assets/img/placeholder.jpg' %}"
+ alt="{{obj.get_full_name}}">
+ {% endif %}
+    </div>
   <div class="col-md-9">
     {% if obj.is_coach %}
     {% if messages %}
@@ -62,10 +67,12 @@
           {% endif %}
           {% endif %}
         </div>
+        {% if not obj.is_admin %}
         <hr>
         <h5 class="card-title">Person Information</h5>
         <p class="card-text"><strong>Phone Number :</strong> {{obj.user_general_additional_info.phone_number}}</p>
         <p class="card-text"><strong>Gender :</strong> {{obj.user_general_additional_info.gender|title}}</p>
+        {% endif %}
         {% if obj.is_coach %}
         <hr>
         <h5 class="card-title">Education Information</h5>

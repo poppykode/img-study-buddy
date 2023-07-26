@@ -20,9 +20,9 @@
 {% endfor %}
 {% endif %}
 <div class="mb-4">
-  <a href="#" class="btn btn-primary">
-    <span class="tf-icons bx bx-plus"></span>&nbsp; Add Admin
-  </a>
+<a href="{% url 'accounts:add_admin' %}" class="btn btn-primary">
+  <span class="tf-icons bx bx-plus"></span>&nbsp; Add Admin
+</a>
 </div>
 <div class="card">
   <div class="table-responsive text-nowrap">
@@ -95,4 +95,7 @@
   </div>
 </div>
 
+
+
 {% endblock %}
+

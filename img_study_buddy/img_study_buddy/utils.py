@@ -50,4 +50,8 @@ def pagination_qs(request,qs):
     page_obj = paginator.get_page(page_number)
     return page_obj
 
+def generate_password():
+    new_password = User.objects.make_random_password()
+    return new_password
+
 

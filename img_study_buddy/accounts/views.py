@@ -15,6 +15,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 
 from img_study_buddy.utils import (
+    generate_password,
     has_session,
     delete_a_file,
     deserialise_,
@@ -484,4 +485,31 @@ def activate_or_deactivate_account(request,user_id):
     messages.success(request,'Account has been successfully '+msg)
     return redirect('accounts:users')
 
+@login_required
+def add_admin(request):
+    template_name = 'registration/add_admin.html'
+    if request.method == 'POST':
+        username =request.POST.get('username','')
+        email = request.POST.get('email')
+        exists = User.objects.filter(username = username).exists()
+        if exists:
+            messages.error(request, 'A user with that username address already exists.')
+            return render(request,template_name)
+        new_user = User.objects.create(
+            username = username,
+            first_name = request.POST.get('first_name'),
+            last_name =request.POST.get('last_name'),
+            email = email,
+            is_admin = True,
+            account_status = 'accepted',
+            is_registration_complete = True
+        )
+        if new_user:
+            password = generate_password()
+            new_user.set_password(password)
+            new_user.save()
+            #send_email
+            messages.success(request,'User successfully added.')
+            return redirect('accounts:users')
 
+    return render(request,template_name)

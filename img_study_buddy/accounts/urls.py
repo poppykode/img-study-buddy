@@ -43,6 +43,6 @@ urlpatterns = [
     path('admin-profile/<uuid:coach_id>',views.admin_profile, name='admin_profile'),
     path('accept-or-reject_application/<uuid:coach_id>/<str:status>',views.accept_or_reject_application, name='accept_or_reject_application'),
     path('activate-or-deactivate_account/<uuid:user_id>',views.activate_or_deactivate_account, name='activate_or_deactivate_account'),
-
+    path('add-admin',views.add_admin, name='add_admin'),
 ]
 
