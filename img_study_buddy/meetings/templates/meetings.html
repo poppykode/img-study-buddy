@@ -1,0 +1,255 @@
+{% extends 'shared.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Meetings{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb breadcrumb-style1">
+    <li class="breadcrumb-item">
+      <a href="{% url 'accounts:redirect_logged' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Meetings</li>
+  </ol>
+</nav>
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+  </button>
+  {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+<div class="mb-4">
+        <div class="nav-align-top mb-4">
+          <ul class="nav nav-pills mb-3" role="tablist">
+            <li class="nav-item">
+              <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#broadcast-mgs" aria-controls="broadcast-mgs" aria-selected="true">
+                Broadcast Meets
+              </button>
+            </li>
+            <li class="nav-item">
+              <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#incoming-requests" aria-controls="incoming-requestse" aria-selected="false">
+                Incoming Requests
+              </button>
+            </li>
+            <li class="nav-item">
+              <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#outgoing-requests" aria-controls="outgoing-requests" aria-selected="false">
+                Outgoing Requests
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#upcoming-meets" aria-controls="upcoming-meets" aria-selected="false">
+                Upcoming Meets
+              </button>
+            </li>
+            <li class="nav-item">
+              <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#past-meets" aria-controls="past-meets" aria-selected="false">
+                Past Meets
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade active show" id="broadcast-mgs" role="tabpanel">
+                <div class="card mb-5">
+                  <div class="card-body">
+                    <form action="{% url 'meetings:create_a_meeting' %}" method="POST">
+                      {% csrf_token %}
+                      <div class="row">
+                        <div class="col-md-3">
+            
+                          <div class="mb-3">    
+                            {{ form.date|as_crispy_field }}
+                          </div>
+                
+                      
+                        </div>
+                        <div class="col-md-3">
+                          <div class="mb-3">    
+                            {{ form.start_time|as_crispy_field }}
+                          </div>
+                      
+                        </div>
+                        <div class="col-md-3">
+                          <div class="mb-3">    
+                            {{ form.end_time|as_crispy_field }}
+                          </div>
+                      
+                        </div>
+              
+                        <div class="col-md-3 d-flex flex-column" style="margin-top: auto !important; margin-bottom: 1.1em !important;">
+          
+                          <button type="submit" class="btn btn-primary">
+                           Broadcast Meeting
+                          </button>
+                        </div>
+                        
+                      </div>
+                  </form>
+                  </div>
+             
+                </div>
+                <div class="row">
+                  {% if brodcast_meetings %}
+                  {% for brodcast_meeting in brodcast_meetings %}
+                  <div class="col-md-6 col-lg-4 mb-3">
+                    
+                    <div class="card h-100">
+                      <img class="card-img-top img-image" src="{{brodcast_meeting.requester.user_general_additional_info.profile_picture.url}}" alt="Card image cap">
+                      <div class="card-body text-center">
+                        <h5 class="card-title">{{brodcast_meeting.requester.get_full_name|title}}</h5>
+                        <p class="card-text">
+                          3 Meetings
+                        </p>
+                        <p class="card-text">
+                          100% Reliability
+                        </p>
+                        <hr>                     
+                          <span class="badge bg-warning"><strong>Date Time:</strong> {{brodcast_meeting.date}} | {{brodcast_meeting.start_time}}-{{brodcast_meeting.end_time}} </span>
+                        <a href="#" class="btn btn-primary mt-3">Accept Meeting</a>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                {% else %}
+      
+                <div class="card">
+                  <div class="card-body">
+                    <p class="card-text">No Broadcast Meetings</p>
+                  </div>
+               </div>
+             
+                {% endif %}
+                </div>
+            </div>
+            <div class="tab-pane fade" id="incoming-requests" role="tabpanel">
+              {% if incoming_meetings %}
+              {% for incoming_meeting in incoming_meetings %}
+              <div class="row">
+                <div class="col-md-6 col-lg-4 mb-3">
+                  <div class="card h-100">
+                    
+                    <img class="card-img-top img-image" src="{{incoming_meeting.requester.user_general_additional_info.profile_picture.url}}" alt="Card image cap">
+                    <div class="card-body text-center">
+                      <h5 class="card-title">{{incoming_meeting.requester.get_full_name|title}}</h5>
+                      <p class="card-text">
+                        3 Meetings
+                      </p>
+                      <p class="card-text">
+                        100% Reliability
+                      </p>
+                      <hr>
+                      <span class="badge bg-warning"><strong>Date Time:</strong> {{incoming_meeting.date}} | {{incoming_meeting.start_time}}-{{incoming_meeting.end_time}} </span>
+                  
+                     <p><a href="#" class="btn btn-success mt-3">Accept Meeting</a></p> 
+                     <p> <a href="#" class="btn btn-primary">Reschedule</a></p>
+                     <p><a href="#" class="btn btn-outline-danger">Reject</a></p>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% else %}
+              <div class="card">
+                  <div class="card-body">
+                    <p class="card-text">No Incoming Requests</p>
+                  </div>
+               </div>
+             
+              {% endif %}
+            </div>
+            <div class="tab-pane fade" id="outgoing-requests" role="tabpanel">
+              <div class="row">
+                <div class="col-md-6 col-lg-4 mb-3">
+                  <div class="card h-100">
+                    
+                    <img class="card-img-top img-image" src="{% static 'assets/img/elements/2.jpg' %}" alt="Card image cap">
+                    <div class="card-body text-center">
+                      <h5 class="card-title">Ngoni Mugandani</h5>
+                      <p class="card-text">
+                        3 Meetings
+                      </p>
+                      <p class="card-text">
+                        100% Reliability
+                      </p>
+                      <hr>
+                      <p class="card-text">
+                        Date Time: 01 Aug 2023 11:00 - 11:30
+                       </p>
+                  
+                    
+                     <p><a href="#" class="btn btn-success">Accept Meeting</a></p> 
+                     <p> <a href="#" class="btn btn-primary">Reschedule</a></p>
+                     <p><a href="#" class="btn btn-outline-danger">Reject</a></p>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="upcoming-meets" role="tabpanel">
+              <div class="row">
+                <div class="col-md-6 col-lg-4 mb-3">
+                  <div class="card h-100">
+                    
+                    <img class="card-img-top img-image" src="{% static 'assets/img/elements/2.jpg' %}" alt="Card image cap">
+                    <div class="card-body text-center">
+                      <h5 class="card-title">Ngoni Mugandani</h5>
+                      <p class="card-text">
+                        3 Meetings
+                      </p>
+                      <p class="card-text">
+                        100% Reliability
+                      </p>
+                      <hr>
+                      <p class="card-text">
+                        Date Time: 01 Aug 2023 11:00 - 11:30
+                       </p>
+                
+                     <p> <a href="#" class="btn btn-primary">Reschedule</a></p>
+                   
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="past-meets" role="tabpanel">
+              <div class="row">
+                <div class="col-md-6 col-lg-4 mb-3">
+                  <div class="card h-100">
+                    
+                    <img class="card-img-top img-image" src="{% static 'assets/img/elements/2.jpg' %}" alt="Card image cap">
+                    <div class="card-body text-center">
+                      <h5 class="card-title">Ngoni Mugandani</h5>
+                      <p class="card-text">
+                        3 Meetings
+                      </p>
+                      <p class="card-text">
+                        100% Reliability
+                      </p>
+                      <hr>
+                      <p class="card-text">
+                        Date Time: 01 Aug 2023 11:00 - 11:30
+                       </p>
+                
+                     <p> <a href="#" class="btn btn-primary">Propose Meeting</a></p>
+                   
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+     
+</div>
+
+
+
+
+{% endblock %}
+

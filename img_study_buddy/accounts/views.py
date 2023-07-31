@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.serializers.json import DjangoJSONEncoder
+from .decorators import is_authenticated
 
 
 from img_study_buddy.utils import (
@@ -372,6 +373,7 @@ def admin_dashboard(request):
     template_name = 'dashboards/admin_dashboard.html'
     return render(request, template_name)
 
+@is_authenticated
 def login(request):
     template_name = 'registration/login.html'
     if request.method == 'POST':
