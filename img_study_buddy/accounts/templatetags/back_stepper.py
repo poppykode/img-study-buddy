@@ -10,4 +10,8 @@ def back_stepper(stored_number,step_by):
 def back_stepper(stored_number,step_by):
     return int(stored_number+step_by)
 
+@register.filter(name='count_mgs')
+def count_mgs(stored_list):
+    return len(stored_list)
+
 

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'review_ratings',
     'coaches',
     'meetings',
+    'offers',
     #3rd Part Apps
     'formtools',
     'crispy_forms',

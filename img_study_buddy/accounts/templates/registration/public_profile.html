@@ -188,6 +188,28 @@
   </div>
 </div>
 
+{% if obj.is_coach %}
+<div class="row">
+  {% for offer in obj.user_offers.all %}
+  <h3 class="mb-3">Offers</h3>
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <img class="card-img-top" src="{{offer.image.url}}" alt="{{offer.title}}">
+      <div class="card-body">
+        <h5 class="card-title">{{offer.title|title}}</h5>
+        <p class="card-text">
+          {{offer.description|truncatechars:20}}
+        </p>
+        <a href="{% url 'offers:offer_details' obj.id %}" class="btn btn-outline-primary">View More</a>
+      </div>
+    </div>
+  </div>
+ 
+{% endfor %}
+</div>
+
+{% endif %}
+
 <!-- Modal -->
 <div class="modal fade" id="meetingModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog" role="document">
