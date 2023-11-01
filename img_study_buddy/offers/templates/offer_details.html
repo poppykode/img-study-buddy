@@ -8,11 +8,10 @@
         <a href="{% url 'accounts:redirect_logged' %}">Home</a>
       </li>
       <li class="breadcrumb-item">
-        <a href="{% url 'coaches:view_all_coaches' %}">Coaches</a> 
-      
+        <a href="{% url 'accounts:profile' %}">Profile</a> 
       </li>
       <li class="breadcrumb-item">
-        <a href="{% url 'accounts:public_profile' obj.user.id %}">{{obj.user.get_full_name|title}}</a>
+        <a href="{% url 'offers:offers' %}">Offers</a>
       </li>
       <li class="breadcrumb-item active">{{obj.title|title}}</li>
     </ol>
@@ -39,20 +38,20 @@
     <div class="col-md-8">
       <div class="card-body">
         <h5 class="card-title">{{obj.title|title}}</h5>
-        <p class="card-text">{{obj.summary|title}}</p>
+        <p class="card-text">{{obj.summary|safe}}</p>
         <span>{% include 'snippets/ratings.html' with obj=obj %} {{obj.countReview}} Reviews</span>
+        {% if request.user.is_candidate %}
         <div class="mt-3">
             <a href="#" class="btn btn-primary">Request Offer £{{obj.price|floatformat:2}}</a>
         </div>
-     
-   
+        {% endif %}
       </div>
     </div>
     <!-- Motivations -->
     
     <div class="col-md-12">
       <div class="card-body">
-        <p class="card-text">{{obj.description|title}}</p>
+        <p class="card-text">{{obj.description|safe}}</p>
       </div>
     </div>
     <hr>
@@ -99,6 +98,7 @@
         </div>
 
       </div>
+      {% if request.user.is_candidate %}
     <hr>
     <div class="col-md-12">
 
@@ -135,7 +135,7 @@
         </form>
       </div>
     </div>
-
+  {% endif %}
   </div>
 </div>
 

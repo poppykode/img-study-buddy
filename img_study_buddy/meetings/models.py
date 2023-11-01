@@ -2,6 +2,7 @@ import uuid
 import datetime as dt
 from django.db import models
 from django.conf import settings
+from tinymce.models import HTMLField
 
 User = settings.AUTH_USER_MODEL
 
@@ -14,9 +15,11 @@ class Meeting(models.Model):
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
-    remarks = models.TextField(null=True, blank=True)
+    remarks = HTMLField(blank=True,null=True)
     was_meeting_accepted = models.BooleanField(null=True)
     was_meeting_attended = models.BooleanField(null=True)
+    was_meeting_cancelled = models.BooleanField(null=True)
+    was_meeting_rejected = models.BooleanField(null=True)
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 

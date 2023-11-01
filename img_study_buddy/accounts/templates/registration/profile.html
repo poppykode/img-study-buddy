@@ -25,12 +25,7 @@
       <li class="nav-item">
         <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Account</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="bx bx-bell me-1"></i> Notifications</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="bx bx-link-alt me-1"></i> Change Password</a>
-      </li>
+  
     </ul>
     <div class="card mb-4">
       <h5 class="card-header">Profile Details</h5>
@@ -44,15 +39,22 @@
           {% endif %}
           <div class="button-wrapper">
             <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
-              <span class="d-none d-sm-block">Upload new photo</span>
-              <i class="bx bx-upload d-block d-sm-none"></i>
-              <input type="file" id="upload" class="account-file-input" hidden="" accept="image/png, image/jpeg">
+              <a href="{% url 'accounts:upload_profile_picture' %}">
+                <span class="d-none d-sm-block" style="color: #fff;">Upload new photo</span>
+                <i class="bx bx-upload d-block d-sm-none"></i>
+              </a>
+            
             </label>
-            <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
+            <a href="{% url 'accounts:change_password' %}" class="btn btn-outline-secondary account-image-reset me-2 mb-4">
               <i class="bx bx-reset d-block d-sm-none"></i>
-              <span class="d-none d-sm-block">Reset</span>
-            </button>
-
+              <span class="d-none d-sm-block">Change Password</span>
+            </a>
+            {% if request.user.is_coach %}
+            <a href="{% url 'offers:offers' %}" class="btn btn-outline-secondary account-image-reset mb-4">
+              <i class="bx bx-reset d-block d-sm-none"></i>
+              <span class="d-none d-sm-block">Offers</span>
+            </a>
+            {% endif %}
             <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
           </div>
         </div>
@@ -63,17 +65,17 @@
         <div class="row">
 
             <div class="col-md-4">
-                <div class="card-subtitle text-muted mb-3">FULL NAME</div>
-                <h5 class="card-title">{{obj.get_full_name|title}}</h5>
+              <h5 class="card-title text-muted mb-3">Full name</h5>
+                <h6 class="card-title">{{obj.get_full_name|title}}</h6>
                
             </div>
             <div class="col-md-4">
-                <div class="card-subtitle text-muted mb-3">E-MAIL</div>
-                <h5 class="card-title">{{obj.email}}</h5>
+              <h5 class="card-title text-muted mb-3">Email</h5>
+                <h6 class="card-title">{{obj.email}}</h6>
             </div>
             <div class="col-md-4">
-                <div class="card-subtitle text-muted mb-3">DATE JOINED</div>
-                <h5 class="card-title">{{obj.date_joined}}</h5>
+              <h5 class="card-title text-muted mb-3">Date joined</h5>
+                <h6 class="card-title">{{obj.date_joined}}</h6>
             </div>
             <div class="col-md-12">
                 <a href="#" class="card-link">Edit <i class="bx bx-edit-alt me-1"></i></a>
@@ -87,16 +89,16 @@
       <div class="card-body">
         <div class="row">
             <div class="col-md-4 col-sm-6">
-                <div class="card-subtitle text-muted mb-3">GENDER</div>
-                <h5 class="card-title">{{obj.user_general_additional_info.gender|title}}</h5>  
+              <h5 class="card-title text-muted mb-3">Gender</h5>
+                <h6 class="card-title">{{obj.user_general_additional_info.gender|title}}</h6>  
             </div>
             <div class="col-md-4 col-sm-6">
-                <div class="card-subtitle text-muted mb-3">PROFILE</div>
-                <h5 class="card-title">{{obj.user_general_additional_info.phone_number}}</h5>
+              <h5 class="card-title text-muted mb-3">Profile</h5>
+                <h6 class="card-title">{{obj.user_general_additional_info.phone_number}}</h6>
             </div>
             <div class="col-md-4 col-sm-6">
-                <div class="card-subtitle text-muted mb-3">TIMEZONE</div>
-                <h5 class="card-title">{{obj.user_general_additional_info.time_zone}}</h5>
+              <h5 class="card-title text-muted mb-3">Timezone</h5>
+                <h6 class="card-title">{{obj.user_general_additional_info.time_zone}}</h6>
             </div>
             <div class="col-md-12">
                 <a href="#" class="card-link">Edit <i class="bx bx-edit-alt me-1"></i></a>
@@ -108,12 +110,12 @@
       <div class="card-body">
         <div class="row">
             <div class="col-md-4 col-sm-6">
-                <div class="card-subtitle text-muted mb-3">EXAM DATE</div> 
-                <h5 class="card-title">{{obj.user_candidate_additional_info.exam_date}}</h5>  
+              <h5 class="card-title text-muted mb-3">Exam date</h5>
+                <h6 class="card-title">{{obj.user_candidate_additional_info.exam_date}}</h6>  
             </div>
             <div class="col-md-4 col-sm-6">
-                <div class="card-subtitle text-muted mb-3">AVAILABILITY</div>
-                <h5 class="card-title">{{obj.user_candidate_additional_info.availability}}</h5>
+              <h5 class="card-title text-muted mb-3">Availability</h5>     
+                <h6 class="card-title">{{obj.user_candidate_additional_info.availability}}</h6>
             </div>
             <div class="col-md-4 col-sm-6">
           
@@ -133,13 +135,13 @@
         <div class="row">
             {% for item in obj.user_education.all %}
             <div class="col-md-4 col-sm-6">
-                <div class="card-subtitle text-muted mb-3">NAME OF INSTUTION</div>
-                <h5 class="card-title">{{item.name_of_instutution|title}}</h5>  
+              <h5 class="card-title text-muted mb-3">Name of institution</h5>   
+                <h6 class="card-title">{{item.name_of_instutution|title}}</h6>  
             </div>
     
             <div class="col-md-4 col-sm-6">
-                <div class="card-subtitle text-muted mb-3">FROM - TO</div>
-                <h5 class="card-title">{{item.period_from}} - {{item.period_to}}</h5>
+              <h5 class="card-title text-muted mb-3">From - To</h5>  
+                <h6 class="card-title">{{item.period_from}} - {{item.period_to}}</h6>
             </div>
             <div class="col-md-4 col-sm-6">
 
@@ -159,20 +161,20 @@
         <div class="row">
             {% for item in obj.user_work_experience.all %}
             <div class="col-md-3 col-sm-6">
-                <div class="card-subtitle text-muted mb-3">NAME OF HOSPITAL</div>
-                <h5 class="card-title">{{item.name_of_hospital|title}}</h5>  
+              <h5 class="card-title text-muted mb-3">Name of hospital</h5>  
+                <h6 class="card-title">{{item.name_of_hospital|title}}</h6>  
             </div>
             <div class="col-md-3 col-sm-6">
-                <div class="card-subtitle text-muted mb-3">COUNTRY</div>
-                <h5 class="card-title">{{item.country_of_hospital|title}}</h5>
+              <h5 class="card-title text-muted mb-3">Country</h5>  
+                <h6 class="card-title">{{item.country_of_hospital|title}}</h6>
             </div>
             <div class="col-md-3 col-sm-6">
-                <div class="card-subtitle text-muted mb-3">POSITION</div>
-                <h5 class="card-title">{{item.position_at_the_hospital|title}}</h5>
+              <h5 class="card-title text-muted mb-3">Position</h5>  
+                <h6 class="card-title">{{item.position_at_the_hospital|title}}</h6>
             </div>
             <div class="col-md-3 col-sm-6">
-                <div class="card-subtitle text-muted mb-3">FROM - TO</div>
-                <h5 class="card-title">{{item.period_from}} - {{item.period_to}}</h5>
+              <h5 class="card-title text-muted mb-3">From - To</h5>  
+                <h6 class="card-title">{{item.period_from}} - {{item.period_to}}</h6>
             </div>
             {% endfor %}
             <div class="col-md-12">
@@ -186,8 +188,8 @@
       <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <div class="card-subtitle text-muted mb-3">DESCRIPTION</div>
-                <h5 class="card-title">{{obj.user_motivation.description|title}}</h5>  
+              <h5 class="card-title text-muted mb-3">Description</h5>  
+                <h6 class="card-title">{{obj.user_motivation.description|safe|title}}</h6>  
             </div>
       
             <div class="col-md-12">
@@ -201,12 +203,12 @@
       <div class="card-body">
         <div class="row">
             <div class="col-md-6">
-                <div class="card-subtitle text-muted mb-3">CURRICULUM VITAE (CV) </div>
-                <h5 class="card-title"><a href="{{obj.user_coach_additional_info.cv.url}}" target="_blank"> Download/View <i class="bx bxs-file-pdf me-1"></i></a> </h5>  
+                <h5 class="card-title text-muted mb-3">Curriculum Vitae (CV)</h5>  
+                <h6 class="card-title"><a href="{{obj.user_coach_additional_info.cv.url}}" target="_blank"> Download/View <i class="bx bxs-file-pdf me-1"></i></a> </h6>  
             </div>
             <div class="col-md-6">
-                <div class="card-subtitle text-muted mb-3">NHS EXPERIENCE</div>
-                <h5 class="card-title">{{obj.user_coach_additional_info.nhs_experience}}</h5>  
+                <h5 class="card-title text-muted mb-3">NHS experience</h5>  
+                <h6 class="card-title">{{obj.user_coach_additional_info.nhs_experience}}</h6>  
             </div>
       
             <div class="col-md-12">
@@ -228,12 +230,13 @@
             <p class="mb-0">Once you delete your account, there is no going back. Please be certain.</p>
           </div>
         </div>
-        <form id="formAccountDeactivation" onsubmit="return false">
+        <form action="{% url 'accounts:activate_or_deactivate_account' obj.id %}">
+          {% csrf_token %}
           <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation">
+            <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation" onchange="document.getElementById('acc').disabled = !this.checked;">
             <label class="form-check-label" for="accountActivation">I confirm my account deactivation</label>
           </div>
-          <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
+          <button type="submit" class="btn btn-danger deactivate-account" id="acc" disabled>Deactivate Account</button>
         </form>
       </div>
     </div>

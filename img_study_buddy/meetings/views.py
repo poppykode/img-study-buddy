@@ -29,30 +29,31 @@ def create_a_meeting(request,requested_id=None):
     return redirect(url)
 
 @login_required
-def reject_or_accept_a_meeting(request,meeting_id,tab):
+def reject_accept_or_cancel_a_meeting(request,meeting_id,type):
     url = request.META.get('HTTP_REFERER')
     requested = request.user
-    status= ''
-    msg = ''
+    was_meeting_accepted = False
+    was_meeting_cancelled = False
+    was_meeting_rejected = False
     obj = get_object_or_404(models.Meeting, id=meeting_id)
-    if not obj.requested == None:
+    if obj.requested is not None:
         requested = obj.requested
-    accepted =request.POST.get('accepted')
-    rejected = request.POST.get('rejected')
-    if accepted:
-        status = True
-        msg = accepted
-    if rejected:
-        status = False
-        msg = rejected
-    obj.was_meeting_accepted = status
+    if type == 'accepted':
+        was_meeting_accepted = True
+    elif type == 'rejected':
+        was_meeting_rejected = True
+    else:
+        was_meeting_cancelled = True
+    obj.was_meeting_accepted = was_meeting_accepted
+    obj.was_meeting_cancelled = was_meeting_cancelled
+    obj.was_meeting_rejected = was_meeting_rejected
     obj.requested = requested
     obj.save()
-    messages.success(request,'Meeting was successfully {}'.format(msg))
+    messages.success(request,'Meeting was successfully {}'.format(type))
     return redirect(url)
 
 @login_required
-def reschedule_a_meeting(request, meeting_id,tab):
+def reschedule_a_meeting(request, meeting_id):
     url = request.META.get('HTTP_REFERER')
     meeting_obj = get_object_or_404(models.Meeting,id=meeting_id)
     date  = request.POST.get('date')
@@ -65,6 +66,16 @@ def reschedule_a_meeting(request, meeting_id,tab):
     #sent a meeting resheduled
     messages.success(request,'Meeting successfully rescheduled to {} at {}'.format(date,time))
     return redirect(url)
+
+@login_required
+def was_attended(request,meeting_id):
+    url = request.META.get('HTTP_REFERER')
+    meeting_obj = get_object_or_404(models.Meeting,id=meeting_id)
+    meeting_obj.was_meeting_attended = True
+    meeting_obj.save()
+    messages.success(request,'Status successfully updated.')
+    return redirect(url)
+
 
 @login_required
 def meetings(request):

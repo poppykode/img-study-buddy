@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.deletion import CASCADE
 from review_ratings.models import ReviewRating
 from django.db.models import Avg, Count
+from tinymce.models import HTMLField
 
 # Create your models here.
 class User (AbstractUser):
@@ -104,7 +105,7 @@ class Education(models.Model):
 
 class Motivation(models.Model):
     user=models.OneToOneField(User,related_name='user_motivation', on_delete=CASCADE)
-    description = models.TextField()
+    description = HTMLField()
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 

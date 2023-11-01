@@ -27,19 +27,19 @@
               </datalist>      
           </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
         <div id="exam_date" class="mb-3">
             <label for="exam_date" class="form-label"> Exam Date</label>
             <input type="date"  name="exam_date" class="datepicker dateinput form-control" data-date-format="YYYY-MM-DD"  id="exam_date">
         </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-4">
           <div class="mb-3">
             <label for="availability" class="form-label">Availability (hrs/day)</label>
             <input type="number" id="availability" class="form-control" name="availability">
           </div>
         </div>
-        <div class="col-md-3">
+        <!-- <div class="col-md-3">
           <div class="mb-3">
             <label for="online_offline" class="form-label">Online Status</label>
             <select id="online_offline" class="form-select" name="online_offline">
@@ -48,7 +48,7 @@
               <option value="Offline">Offline</option>
             </select>
           </div>
-        </div>
+        </div> -->
         <div class="col-md-2 d-flex flex-column" style="margin-top: auto !important; margin-bottom: 1.1em !important;">
           
           <button type="submit" class="btn btn-primary">
@@ -75,9 +75,6 @@
         {% endif %}
         {% if availability %}
           Availability : <b>{{availability}} hrs/day</b>
-        {% endif %}
-        {% if online_offline %}
-          Status: <b>{{online_offline}} </b>
         {% endif %}
         <a href="{% url 'study_buddies:view_all_study_buddies' %}"><span class="tf-icons bx bx-x me-1" style="color: red; font-size: 30px;"></span></a>
         </span>

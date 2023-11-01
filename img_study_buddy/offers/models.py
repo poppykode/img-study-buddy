@@ -2,18 +2,22 @@ from django.db import models
 from django.conf import settings
 from review_ratings import models as m
 from django.db.models import Avg, Count
+from tinymce.models import HTMLField
 
 
 User = settings.AUTH_USER_MODEL
 # Create your models here.
 class Offer(models.Model):
+    PENDING ='pending'
+    STATUS = (('accepted','Accepted'),('rejected','Rejected'),(PENDING,'Pending'))
     user=models.ForeignKey(User,related_name='user_offers', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='offers')
-    file = models.FileField(upload_to='files')
-    summary = models.TextField()
-    description = models.TextField()
+    file = models.FileField(upload_to='files', null=True,blank=True)
+    summary = HTMLField()
+    description = HTMLField()
     price = models.FloatField(default=0.00)
+    status = models.CharField(max_length=10,choices=STATUS,default=PENDING)
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 

@@ -10,64 +10,140 @@
       <li class="breadcrumb-item active">Candidate Dashboard</li>
     </ol>
   </nav>
-  <div class="row">
+
+
+<div class="row">
   {% if messages %}
   {% for message in messages %}
-  <div class="alert alert-{{ message.tags }} alert-dismissible col-md-12" role="alert">
-      <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
-      </button>
+  <div class="col-md-12">
+    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
       {{ message }}
+        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+        </button>
+       
+    </div>
   </div>
   {% endfor %}
   {% endif %}
+  <div class="col-md-12">
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      Please confirm attendance for 3 outstanding meetings <a href="">Confirm</a>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+      </button>
+    </div>
+  </div>
 
-  <div class="col-md-3">
-    <div class="card mb-3">
+  <div class="col-md-4 mb-4">
+    <div class="card">
       <div class="card-body">
-        <i class="menu-icon tf-icons bx bx-user-plus c-font-size"></i>
-        <br>
-        <h5 class="card-title">Study Buddies</h5>  
-        <a href="{% url 'study_buddies:view_all_study_buddies' %}">
-          <button type="button" class="btn btn-xs btn-primary">
-            <span class="tf-icons bx bx-right-arrow-alt"></span>&nbsp; VIEW
-          </button>
-        </a> 
-       
+        <div class="d-flex justify-content-between">
+          <div class="card-info">
+            <p class="card-text">Meeting Board</p>
+            <div class="d-flex align-items-end">
+              <span class="text-success me-2"><a href="{% url 'meetings:meetings' %}">View</a></span>       
+            </div>
+          </div>
+          <div class="card-icon">
+            <a href="{% url 'meetings:meetings' %}">
+            <span class="badge bg-label-primary rounded p-2">
+              <i class="bx bx-group bx-sm"></i>
+            </span>
+          </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-md-3">
-    <div class="card mb-3">
+  <div class="col-md-4 mb-4">
+    <div class="card">
       <div class="card-body">
-        <i class="menu-icon tf-icons bx bx-box c-font-size"></i>
-        <br>
-        <h5 class="card-title">Stations</h5>  
-        <a href="#">
-          <button type="button" class="btn btn-xs btn-primary">
-            <span class="tf-icons bx bx-right-arrow-alt"></span>&nbsp; VIEW
-          </button>
-        </a> 
-       
+        <div class="d-flex justify-content-between">
+          <div class="card-info">
+            <p class="card-text">Profile</p>
+            <div class="d-flex align-items-end">
+              <span class="text-success me-2"><a href="{% url 'accounts:profile' %}">View</a></span>       
+            </div>
+          </div>
+          <div class="card-icon">
+            <a href="{% url 'accounts:profile' %}">
+            <span class="badge bg-label-primary rounded p-2">
+              <i class="bx bx-group bx-sm"></i>
+            </span>
+          </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-md-3">
-    <div class="card mb-3">
+
+  <div class="col-md-4 mb-4">
+    <div class="card">
       <div class="card-body">
-        <i class="menu-icon tf-icons bx bx-group c-font-size"></i>
-        <br>
-        <h5 class="card-title">Coaches</h5>  
-        <a href="#">
-          <button type="button" class="btn btn-xs btn-primary">
-            <span class="tf-icons bx bx-right-arrow-alt"></span>&nbsp; VIEW
-          </button>
-        </a> 
-       
+        <div class="d-flex justify-content-between">
+          <div class="card-info">
+            <p class="card-text">Coaches</p>
+            <div class="d-flex align-items-end">
+              <span class="text-success me-2"><a href="{% url 'coaches:view_all_coaches' %}">View</a></span>       
+            </div>
+          </div>
+          <div class="card-icon">
+            <a href="{% url 'coaches:view_all_coaches' %}">
+            <span class="badge bg-label-primary rounded p-2">
+              <i class="bx bx-group bx-sm"></i>
+            </span>
+          </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div class="card-info">
+            <p class="card-text">Study Buddies</p>
+            <div class="d-flex align-items-end">
+              <span class="text-success me-2"><a href="{% url 'study_buddies:view_all_study_buddies' %}">View</a></span>       
+            </div>
+          </div>
+          <div class="card-icon">
+            <a href="{% url 'study_buddies:view_all_study_buddies' %}">
+            <span class="badge bg-label-primary rounded p-2">
+              <i class="bx bx-group bx-sm"></i>
+            </span>
+          </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="card mb-3">
+      <div class="card-body text-center">
+        <h5 class="card-title">
+          {% include 'snippets/ratings.html' with obj=request.user %}
+        </h5>
+        <h5 class="card-title">Your Reviews</h5>
+      </div>
+    </div>
+   </div>
+   <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <h5 class="card-title">100%</h5>
+          <h5 class="card-title">Your Reliability</h5>
+        </div>
+      </div>
+   </div>
 
 
 
 </div>
+
+
+
+
+
 {% endblock %}

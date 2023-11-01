@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from  offers import models as mo
+from tinymce.models import HTMLField
 
 User = settings.AUTH_USER_MODEL
 
@@ -38,7 +39,7 @@ class AvgRating(models.Model):
 class OfferReviewRating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='user_review')
     offer = models.ForeignKey(mo.Offer, on_delete=models.CASCADE,related_name='offer_review')
-    review = models.TextField(max_length=500, blank=True)
+    review = HTMLField()
     rating = models.FloatField()
     ip = models.CharField(max_length=20, blank=True)
     status = models.BooleanField(default=True)

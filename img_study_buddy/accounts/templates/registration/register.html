@@ -28,8 +28,7 @@
       {% endif %}
       <h4 class="mb-2 text-center">Welcome to registration</h4>
       <p class="text-center" style="font-size:  0.75rem;"> PLEASE SELECT YOUR ROLE</p>
-<hr>
-
+    <hr>
       <form id="formAuthentication" class="mb-3" action="{% url 'accounts:register' %}" method="POST">
         {% csrf_token %}
         <div class="text-center">
@@ -101,7 +100,7 @@
             <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
           </div>
         </div>
-
+ 
         <div class="mb-3">
           <div class="form-check">
             <input class="form-check-input" onchange="document.getElementById('sign_up').disabled = !this.checked;" type="checkbox" id="terms-conditions" name="terms" />

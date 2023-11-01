@@ -44,5 +44,7 @@ urlpatterns = [
     path('accept-or-reject_application/<uuid:coach_id>/<str:status>',views.accept_or_reject_application, name='accept_or_reject_application'),
     path('activate-or-deactivate_account/<uuid:user_id>',views.activate_or_deactivate_account, name='activate_or_deactivate_account'),
     path('add-admin',views.add_admin, name='add_admin'),
+    path('change-password',views.change_password, name='change_password'),
+    path('upload-profile-picture',views.upload_profile_picture, name='upload_profile_picture'),
 ]
 

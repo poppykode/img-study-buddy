@@ -1,5 +1,20 @@
 from django import forms
 from . import models
+from tinymce.widgets import TinyMCE
+from django.contrib.auth.forms import PasswordChangeForm
+
+class ProfilePictureForm(forms.Form):
+    profile_picture = forms.ImageField(
+        help_text="Allowed JPG or PNG",
+        widget= forms.FileInput(attrs={'accept': 'image/png, image/jpeg, image/jpg'}))
+
+class MyPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['old_password'].help_text = ''
+        self.fields['new_password1'].help_text = ''
+        self.fields['new_password2'].help_text = ''
+
 
 class GeneralAdditionalInfoForm(forms.ModelForm):
     class Meta:
@@ -42,7 +57,7 @@ class MotivationForm(forms.ModelForm):
     class Meta:
         model = models.Motivation
         widgets = {
-          'description': forms.Textarea(attrs={'rows':4, 'cols':15}),
+          'description': TinyMCE(attrs={'rows':4, 'cols':15}),
         }
         fields = ('description',)
 

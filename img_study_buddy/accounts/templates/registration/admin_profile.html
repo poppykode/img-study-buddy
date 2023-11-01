@@ -72,6 +72,7 @@
         <h5 class="card-title">Person Information</h5>
         <p class="card-text"><strong>Phone Number :</strong> {{obj.user_general_additional_info.phone_number}}</p>
         <p class="card-text"><strong>Gender :</strong> {{obj.user_general_additional_info.gender|title}}</p>
+        <p class="card-text"><strong>Email :</strong> {{obj.email}}</p>
         {% endif %}
         {% if obj.is_coach %}
         <hr>
@@ -124,7 +125,7 @@
         </div>
         <hr>
         <h5 class="card-title">Motivation</h5>
-        <p class="card-text">{{obj.user_motivation.description}}</p>
+        <p class="card-text">{{obj.user_motivation.description|safe}}</p>
         <hr>
         <h5 class="card-title">Additional Info</h5>
         <p class="card-text"><strong>NHS Experience :</strong> {{obj.user_coach_additional_info.nhs_experience}} months

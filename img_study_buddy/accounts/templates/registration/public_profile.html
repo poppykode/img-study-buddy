@@ -93,7 +93,7 @@
         {% if obj.is_coach %}
         <div class="col-md-12">
           <div class="card-body">
-            <p class="card-text">{{obj.user_motivation.description|title}}</p>
+            <p class="card-text">{{obj.user_motivation.description|safe|title}}</p>
           </div>
         </div>
         <hr>
@@ -127,7 +127,7 @@
 
                     </div>
                     <!-- <p class="mb-4">{{review.timestamp}}</p> -->
-                    <p>{{review.review}}</p>
+                    <p>{{review.review|safe}}</p>
 
                   </div>
                 </li>
@@ -172,10 +172,10 @@
               <div class="clearfix"></div>
               <div class="mb-3">
 
-                <div class="input-group">
+              
                   <textarea id="basic-icon-default-message" name="review" class="form-control"
                     placeholder="Review"></textarea>
-                </div>
+               
 
               </div>
               <button type="submit" class="btn btn-primary">Submit Review</button>
@@ -190,7 +190,7 @@
 
 {% if obj.is_coach %}
 <div class="row">
-  {% for offer in obj.user_offers.all %}
+  {% for offer in offers %}
   <h3 class="mb-3">Offers</h3>
   <div class="col-md-4 mb-3">
     <div class="card h-100">
@@ -200,7 +200,7 @@
         <p class="card-text">
           {{offer.description|truncatechars:20}}
         </p>
-        <a href="{% url 'offers:offer_details' obj.id %}" class="btn btn-outline-primary">View More</a>
+        <a href="{% url 'offers:offer_details' offer.id %}" class="btn btn-outline-primary">View More</a>
       </div>
     </div>
   </div>

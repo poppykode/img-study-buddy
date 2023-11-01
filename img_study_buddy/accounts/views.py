@@ -1,6 +1,7 @@
 import os
-import json
-import base64
+import plotly.express as px
+import pandas as pd
+from plotly.offline import plot
 from formtools.wizard.views import SessionWizardView
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
@@ -10,9 +11,9 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
-from django.core.serializers.json import DjangoJSONEncoder
 from .decorators import is_authenticated
+from  . import models
+from offers.models import Offer
 
 
 from img_study_buddy.utils import (
@@ -371,7 +372,23 @@ def coach_dashboard(request):
 @login_required  
 def admin_dashboard(request):
     template_name = 'dashboards/admin_dashboard.html'
-    return render(request, template_name)
+    qs = models.User.objects.all()
+    accepted = len(qs.filter(is_coach=True).filter(account_status = 'accepted'))
+    pending = len(qs.filter(is_coach=True).filter(account_status = 'pending'))
+    rejected = len(qs.filter(is_coach=True).filter(account_status = 'rejected'))
+    values = [accepted, pending,rejected]
+    names =  ["Accepted","Pending","Rejected"]
+    df = px.data.iris()
+    fig = px.pie(df,values=values, names=names)
+    pie_chart = plot(fig, output_type="div")
+    offers = Offer.objects.filter(status='pending')
+    context ={
+        'users':qs,
+        "pie_chart":pie_chart,
+        'offers':offers,
+        'number_of_offers':len(offers)
+    }
+    return render(request, template_name,context)
 
 @is_authenticated
 def login(request):
@@ -379,18 +396,22 @@ def login(request):
     if request.method == 'POST':
         username = request.POST.get('username', '')
         password = request.POST.get('password', '')
+        print("we are in login")
         user = auth.authenticate(username=username, password=password)
+        print(type(user))
+        print(user)
         if user is not None:
-            if not user.is_active:
+            print("is activate")
+            print(user.is_active)
+            if user.is_active:
+                auth.login(request, user)
+                messages.success(request, 'You have successfully logged in.')
+                return redirect(reverse('accounts:redirect_logged'))
+            else:
                 messages.error(
                     request, 'Your account has been deactivate, please contact IMGSTUDYBUDDY.')
-                return render(request, template_name)
-            auth.login(request, user)
-            messages.success(request, 'You have successfully logged in.')
-            return redirect(reverse('accounts:redirect_logged'))
+                return redirect("accounts:login")    
         messages.error(request, 'Invalid username or password.')
-    print("port number")
-    print(request.META['SERVER_PORT']) 
     return render(request, template_name)
 
 def register(request):
@@ -443,8 +464,9 @@ def profile(request):
 def public_profile(request,user_id):
     template_name =  'registration/public_profile.html'
     user_qs = get_object_or_404(models.User, id=user_id)
+    offers = Offer.objects.filter(user=user_qs).filter(status ='accepted')
     form = f.MeetingForm()
-    return render(request,template_name, {'obj':user_qs,'form':form})
+    return render(request,template_name, {'obj':user_qs,'form':form,'offers':offers})
 
 @login_required
 def users(request):
@@ -473,9 +495,11 @@ def accept_or_reject_application(request,coach_id,status):
 
 @login_required
 def activate_or_deactivate_account(request,user_id):
+    url = request.META.get('HTTP_REFERER')
     user = get_object_or_404(User,id=user_id)
     is_active =''
     msg = ''
+
     if user.is_active:
         is_active = False
         msg='deactivated'
@@ -484,8 +508,10 @@ def activate_or_deactivate_account(request,user_id):
         msg='activated'
     user.is_active = is_active
     user.save()
+    if request.user.id == user_id:
+        auth.logout(request)
     messages.success(request,'Account has been successfully '+msg)
-    return redirect('accounts:users')
+    return redirect(url)
 
 @login_required
 def add_admin(request):
@@ -515,3 +541,42 @@ def add_admin(request):
             return redirect('accounts:users')
 
     return render(request,template_name)
+
+@login_required
+def change_password(request):
+    user_qs = get_object_or_404(User, id=request.user.id)
+    if request.method == 'POST':
+        form = forms.MyPasswordChangeForm(data=request.POST, user=user_qs)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Password successfully changed.')
+            return redirect('accounts:profile')
+        else:
+            messages.error(request,f"Something went wrong with {form.errors}")
+            return redirect('accounts:profile')
+    else:
+        form = forms.MyPasswordChangeForm(user=user_qs)
+        args = {'form': form, 'obj': user_qs}
+        return render(request, 'registration/change_password.html', args)
+    
+@login_required
+def upload_profile_picture(request):
+    template_name = 'registration/upload_profile_picture.html'
+    user_qs = get_object_or_404(models.GeneralAdditionalInfo, user=request.user.id)
+    form = forms.ProfilePictureForm()
+    if request.method == 'POST':
+        form = forms.ProfilePictureForm(request.POST,request.FILES)
+        if form.is_valid():
+            user_qs.profile_picture = form.cleaned_data["profile_picture"]
+            user_qs.save()
+            messages.success(request, 'Profile picture successfully uploaded.')
+            return redirect('accounts:profile')
+        else:
+            messages.error(request,f"Something went wrong with {form.errors}")
+            args = {'form': form, 'obj': user_qs}
+            return render(request, template_name, args)
+    else:
+        args = {'form': form, 'obj': user_qs}
+        return render(request, template_name, args)
+

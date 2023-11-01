@@ -20,13 +20,13 @@ def view_all_study_buddies(request):
         time_zone = request.POST.get('time_zone_')
         exam_date = request.POST.get('exam_date')
         availability = request.POST.get('availability')
-        online_offline = request.POST.get('online_offline')
+        # online_offline = request.POST.get('online_offline')
         if time_zone == '':
             time_zone = None
         if exam_date == '':
             exam_date = None
-        if online_offline == '':
-            online_offline = None
+        # if online_offline == '':
+        #     online_offline = None
         if availability == '':
             availability = None
         print('____')
@@ -43,7 +43,6 @@ def view_all_study_buddies(request):
             'time_zone':time_zone,
             'exam_date':exam_date,
             'availability': availability,
-            'online_offline': online_offline,
             'type':1
         }
 
