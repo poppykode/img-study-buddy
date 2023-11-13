@@ -1,0 +1,93 @@
+{% extends 'shared.html' %}
+{% load static %}
+{% block title %}Coach Dashboard{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+      <li class="breadcrumb-item">
+        <a href="{% url 'accounts:redirect_logged' %}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">Coach Dashboard</li>
+    </ol>
+  </nav>
+<div class="row">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="col-md-12">
+    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+      {{ message }}
+        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+        </button>
+       
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div class="card-info">
+            <p class="card-text">Meeting Board</p>
+            <div class="d-flex align-items-end">
+              <span class="text-success me-2"><a href="{% url 'meetings:coach_meeting_board' %}">View</a></span>       
+            </div>
+          </div>
+          <div class="card-icon">
+            <a href="{% url 'meetings:coach_meeting_board' %}">
+            <span class="badge bg-label-primary rounded p-2">
+              <i class="bx bx-group bx-sm"></i>
+            </span>
+          </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div class="card-info">
+            <p class="card-text">Profile</p>
+            <div class="d-flex align-items-end">
+              <span class="text-success me-2"><a href="{% url 'accounts:profile' %}">View</a></span>       
+            </div>
+          </div>
+          <div class="card-icon">
+            <a href="{% url 'accounts:profile' %}">
+            <span class="badge bg-label-primary rounded p-2">
+              <i class="bx bx-group bx-sm"></i>
+            </span>
+          </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div class="card-info">
+            <p class="card-text">Offers</p>
+            <div class="d-flex align-items-end">
+              <span class="text-success me-2"><a href="{% url 'offers:offers' %}">View</a></span>       
+            </div>
+          </div>
+          <div class="card-icon">
+            <a href="{% url 'offers:offers' %}">
+            <span class="badge bg-label-primary rounded p-2">
+              <i class="bx bx-group bx-sm"></i>
+            </span>
+          </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+{% endblock %}

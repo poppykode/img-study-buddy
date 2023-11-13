@@ -1,0 +1,220 @@
+{% extends 'shared.html' %}
+{% load back_stepper %}
+{% load static %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block css %}
+<style>
+  .scrollable-div {
+  width: 100%;
+  height: 350px; 
+  overflow: auto;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+      <li class="breadcrumb-item">
+        <a href="{% url 'accounts:redirect_logged' %}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">Admin Dashboard</li>
+    </ol>
+  </nav>
+
+  <div class="row">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="col-md-12">
+      <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+        {{ message }}
+          <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+          </button>
+         
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="card-info">
+              <p class="card-text">Users</p>
+              <div class="d-flex align-items-end">
+                <!-- <h4 class="card-title mb-0 me-2">58</h4> -->
+                <span class="text-success me-2"><p>Active ({{users|summations:'total_active_user'}})</p></span>
+                <span class="text-danger"><p>Inactive ({{users|summations:'total_inactive_user'}})</p></span>
+              </div>
+              <small><strong>Total Users</strong> <a href="{% url 'accounts:users' %}"> ({{users|summations:'total_users'}})</a></small>
+            </div>
+            <div class="card-icon">
+              <a href="{% url 'accounts:users' %}">
+              <span class="badge bg-label-primary rounded p-2">
+                <i class="bx bx-group bx-sm"></i>
+              </span>
+            </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="card-info">
+              <p class="card-text">Coaches</p>
+              <div class="d-flex align-items-end">
+                <!-- <h4 class="card-title mb-0 me-2">58</h4> -->
+                <span class="text-success me-2"><p>Active ({{users|summations:'total_coaches_active'}})</p></span>
+                <span class="text-danger"><p>Inactive ({{users|summations:'total_coaches_inactive'}})</p></span>
+              </div>
+              <small><strong>Total Coaches</strong>  <a href="{% url 'accounts:users' %}"> ({{users|summations:'total_coaches'}})</a></small>
+            </div>
+            <div class="card-icon">
+              <a href="{% url 'accounts:users' %}">
+              <span class="badge bg-label-primary rounded p-2">
+                <i class="bx bx-group bx-sm"></i>
+              </span>
+            </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="card-info">
+              <p class="card-text">Candidates</p>
+              <div class="d-flex align-items-end">
+                <!-- <h4 class="card-title mb-0 me-2">58</h4> -->
+                <span class="text-success me-2"><p>Active ({{users|summations:'total_candidates_active'}})</p></span>
+                <span class="text-danger"><p>Inactive ({{users|summations:'total_candidates_inactive'}})</p></span>
+              </div>
+              <small><strong>Total Candidates</strong><a href="{% url 'accounts:users' %}"> ({{users|summations:'total_candidates'}})</a></small>
+            </div>
+            <div class="card-icon">
+              <a href="{% url 'accounts:users' %}">
+              <span class="badge bg-label-primary rounded p-2">
+                <i class="bx bx-group bx-sm"></i>
+              </span>
+            </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="card-info">
+              <p class="card-text">Applications</p>
+              <div class="d-flex align-items-end">
+                <!-- <h4 class="card-title mb-0 me-2">58</h4> -->
+                <span class="text-success me-2"><p>Accepted ({{users|summations:'accepted'}})</p></span>
+                <span class="text-warning me-2"><p>Pending ({{users|summations:'pending'}})</p></span>
+                <span class="text-danger me-2"><p>Rejected ({{users|summations:'rejected'}})</p></span>
+              </div>
+              <small><strong>Total Aplications</strong> <a href="{% url 'accounts:users' %}">({{users|summations:'total_coaches'}})</a></small>
+            </div>
+            <div class="card-icon">
+              <a href="{% url 'accounts:users' %}">
+              <span class="badge bg-label-primary rounded p-2">
+                <i class="bx bx-file bx-sm"></i>
+              </span>
+            </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="card-info">
+              <p class="card-text">Meetings</p>
+              <div class="d-flex align-items-end">
+                <!-- <h4 class="card-title mb-0 me-2">58</h4> -->
+                <span class="text-success me-2"><p>Attended ({{meetings|summations:'attended_meetings'}})</p></span>
+                <span class="text-warning me-2"><p>Cancelled ({{meetings|summations:'cancelled_meetings'}})</p></span>
+                <span class="text-danger me-2"><p>Rejected ({{meetings|summations:'rejected_meetings'}})</p></span>
+                <span class="text-primary me-2"><p>Unattended ({{meetings|summations:'unattended'}})</p></span>
+                <span class="text-default me-2"><p>Accepted ({{meetings|summations:'accepted_meeting'}})</p></span>
+              </div>
+              <small><strong>Total Meetings</strong> <a href="{% url 'meetings:all_meetings_admin' %}">({{meetings|summations:'total_meetings'}})</a></small>
+            </div>
+            <div class="card-icon">
+              <a href="{% url 'meetings:all_meetings_admin' %}">
+              <span class="badge bg-label-primary rounded p-2">
+                <i class="bx bx-file bx-sm"></i>
+              </span>
+            </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7 mb-4">
+      <div class="card">
+        <p class="card-header">Pending Offers({{number_of_offers}})</p>
+        <div class="scrollable-div mb-4">
+        <div class="table-responsive text-nowrap p-4">
+          <table class="table" id="offers">
+            <thead>
+              <tr class="text-nowrap">
+                <th>Content Title</th>
+                <th>Requester</th>
+                <th>Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for offer in offers %}
+              <tr>
+                <td><a href="{% url 'offers:offer_details' offer.id %}">{{offer.title|title}}</a></td>
+                <td>{{offer.user.get_full_name|title}}</td>
+                <td>£{{offer.price|floatformat:2}}</td>
+                <td>
+                 
+                  <div class="dropdown">
+                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                      <span class="badge bg-label-warning me-1">{{offer.status}}</span>
+                      <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="{% url 'offers:accept_or_reject_offer' offer.id 'accepted' %}"><span class="badge bg-label-success me-1">Accept</span></a>
+                      <a class="dropdown-item" href="{% url 'offers:accept_or_reject_offer' offer.id 'rejected' %}"><span class="badge bg-label-danger me-1">Reject</span></a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+         {% endfor %}
+     
+            </tbody>
+          </table>
+        
+        </div>
+      </div>
+      </div>
+    </div>
+    <div class="col-md-5 mb-4">
+      {% autoescape off %}
+      {{ pie_chart }}
+     {% endautoescape %}
+    </div>
+
+  </div>
+
+{% endblock %}
+{% block js %}
+<script>
+  let table = new DataTable('#offers');
+</script>
+
+{% endblock %}

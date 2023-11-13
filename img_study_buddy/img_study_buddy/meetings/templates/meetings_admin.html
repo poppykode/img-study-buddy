@@ -1,0 +1,119 @@
+{% extends 'shared.html' %}
+{% load static %}
+{% block title %}Admin meetings{% endblock %}
+{% block css %}
+<style>
+  .scrollable-div {
+  width: 100%;
+  overflow: auto;
+}
+</style>
+{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb breadcrumb-style1">
+    <li class="breadcrumb-item">
+      <a href="{% url 'accounts:redirect_logged' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Admin Meetings</li>
+  </ol>
+</nav>
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+  </button>
+  {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+<div class="card p-3">
+<div class="scrollable-div mb-4">
+    <div class="table-responsive text-nowrap">
+        <table class="table" id="meetings">
+        <thead>
+            <tr>
+            <th>Requester</th>
+            <th>Requested</th>
+            <th>Date</th>
+            <th>Times</th>
+            <th>Attended</th>
+            <th>Accepted</th>
+            <th>Cancelled</th>
+            <th>Rejected</th> 
+            </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+            {% for meeting in meetings %}
+            <tr>
+                <td>{{meeting.requester.get_full_name|title}}</td>
+                <td>
+                    {% if meeting.requested.get_full_name == None %}
+                      --
+                    {% else %}
+                     {{meeting.requested.get_full_name|title}}</td>
+                    {% endif %}
+                <td>
+                    {% if meeting.is_past_due %}
+                    <span class="badge bg-label-danger me-1"> {{meeting.date}}</span>
+                    {% else %}
+                    <span class="badge bg-label-success me-1"> {{meeting.date}}</span>
+                    {% endif %}
+                </td>
+                <td>{{meeting.start_time}} - {{meeting.end_time}} </td>
+                <td>
+                    {% if meeting.was_meeting_attended == None %}
+                    --
+                    {% elif meeting.was_meeting_attended == False %}      
+                    <span class="badge bg-label-danger me-1">No</span>
+                    {% else %}
+                    <span class="badge bg-label-success me-1">Yes</span>
+                    {% endif %}                
+                </td>
+                <td>
+                    {% if meeting.was_meeting_accepted == None %}
+                    --
+                {% elif meeting.was_meeting_accepted == False %}
+                <span class="badge bg-label-danger me-1">No</span>
+                {% else %}
+                <span class="badge bg-label-success me-1">Yes</span>
+                {% endif %}             
+                </td>
+                <td>
+                    {% if meeting.was_meeting_cancelled == None %}
+                    --
+                {% elif meeting.was_meeting_cancelled == False %}
+                <span class="badge bg-label-danger me-1">No</span>
+                {% else %}
+                <span class="badge bg-label-success me-1">Yes</span>
+                {% endif %}                    
+                </td>
+                <td>
+                    {% if meeting.was_meeting_rejected == None %}
+                    --
+                {% elif meeting.was_meeting_rejected == False %}
+                <span class="badge bg-label-danger me-1">No</span>
+                {% else %}
+                <span class="badge bg-label-success me-1">Yes</span>
+                {% endif %}  
+                </td>
+        
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+  let table = new DataTable('#meetings');
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,72 @@
+{% extends 'shared.html' %}
+{% load static %}
+{% block title %}Users{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb breadcrumb-style1">
+    <li class="breadcrumb-item">
+      <a href="{% url 'accounts:redirect_logged' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Users</li>
+  </ol>
+</nav>
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+  </button>
+  {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+<div class="card p-3">
+    <div class="table-responsive text-nowrap p-4">
+        <table class="table" id="offers">
+          <thead>
+            <tr class="text-nowrap">
+              <th>Meeting Date</th>
+              <th>Meeting Start Time</th>
+              <th>Meeting End Time</th>
+              <th>Requested Person</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for mt in meetings %}
+            <tr>
+              <td>{{mt.date}}</td>
+              <td>{{mt.start_time}}</td>
+              <td>{{mt.end_time}}</td>
+              <td>{{mt.requested.get_full_name|title}}</td>
+              <td>
+               
+                <div class="dropdown">
+                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                    <span class="badge bg-label-warning me-1">
+                        Was attended: {{mt.was_meeting_attended}}</span>
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{% url 'meetings:was_attended' mt.id 'yes' %}"><span class="badge bg-label-success me-1">Yes</span></a>
+                    <a class="dropdown-item" href="{% url 'meetings:was_attended' mt.id 'no' %}"><span class="badge bg-label-danger me-1">No</span></a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+       {% endfor %}
+   
+          </tbody>
+        </table>
+      
+      </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+  let table = new DataTable('#users');
+</script>
+
+{% endblock %}
+
