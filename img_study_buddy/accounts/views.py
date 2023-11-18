@@ -495,11 +495,11 @@ def admin_profile(request,coach_id):
 def accept_or_reject_application(request,coach_id,status):
     coach_qs = get_object_or_404(models.User,id=coach_id)
     subject = 'Application failed'
-    message = 'Hi, '+ coach_qs.get_full_name() + ' i regret to tell you that your application was not successful, for more info plese email info@imgstudybuddy.com.'
+    message = f'Hi, {coach_qs.get_full_name()}, i regret to inform you that your application was not successful, for more info plese email info@imgstudybuddy.com.'
     is_coach_accepted = False
     if status =='accepted':
         subject ='Application success'
-        message = 'Hi, '+ coach_qs.get_full_name() + 'congradulations, your application was successfull, please click <a href="http://imgstudybuddies.pythonanywhere.com/">link</a>  to login in.'
+        message = f'Hi, {coach_qs.get_full_name()}, congradulations, your application was successfull, please click <a href="http://imgstudybuddies.pythonanywhere.com/">link</a>  to login in.'
         is_coach_accepted = True
     coach_qs.is_coach_accepted = is_coach_accepted
     coach_qs.account_status = status
@@ -601,14 +601,30 @@ def update_exam_date_and_availability(request):
     template_name = 'registration/update_exam_date_and_availability.html'
     obj = get_object_or_404(models.CandidateAdditionalInfo, user = request.user)
     if request.method == 'POST':
-        form = forms.ExamDateAndAvailabiltyForm(request.POST, instance=obj)
+        form = forms.CandidateAdditionalInfoForm(request.POST, instance=obj)
         if form.is_valid():
             obj.exam_date = request.POST.get('exam_date')
             obj.availability = request.POST.get('availability')
             obj.save()
             messages.success(request,'Info successfully updated.')
             return redirect('accounts:profile')
-    form = forms.ExamDateAndAvailabiltyForm(instance=obj)
+    form = forms.CandidateAdditionalInfoForm(instance=obj)
+    return render(request,template_name,{'obj':obj,'form':form})
+
+@login_required
+def update_general_additional_info(request):
+    template_name = 'registration/update_general_additional_info.html'
+    obj = get_object_or_404(models.GeneralAdditionalInfo, user = request.user)
+    if request.method == 'POST':
+        form = forms.GeneralAdditionalInfoForm(request.POST, instance=obj)
+        if form.is_valid():
+            obj.gender = request.POST.get('gender')
+            obj.time_zone = request.POST.get('time_zone')
+            obj.phone_number = request.POST.get('phone_number')
+            obj.save()
+            messages.success(request,'Info successfully updated.')
+            return redirect('accounts:profile')
+    form = forms.GeneralAdditionalInfoForm(instance=obj)
     return render(request,template_name,{'obj':obj,'form':form})
 
 

@@ -46,6 +46,7 @@ urlpatterns = [
     path('add-admin',views.add_admin, name='add_admin'),
     path('change-password',views.change_password, name='change_password'),
     path('upload-profile-picture',views.upload_profile_picture, name='upload_profile_picture'),
+    path('update-general-additional-info',views.update_general_additional_info, name='update_general_additional_info'),
     path('update-exam-date-and-availability',views.update_exam_date_and_availability, name='update_exam_date_and_availability'),
 ]
 

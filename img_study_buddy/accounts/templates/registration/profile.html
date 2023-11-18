@@ -95,7 +95,7 @@
                 <h6 class="card-title">{{obj.user_general_additional_info.gender|title}}</h6>  
             </div>
             <div class="col-md-4 col-sm-6">
-              <h5 class="card-title text-muted mb-3">Profile</h5>
+              <h5 class="card-title text-muted mb-3">Phone Number</h5>
                 <h6 class="card-title">{{obj.user_general_additional_info.phone_number}}</h6>
             </div>
             <div class="col-md-4 col-sm-6">
@@ -103,7 +103,7 @@
                 <h6 class="card-title">{{obj.user_general_additional_info.time_zone}}</h6>
             </div>
             <div class="col-md-12">
-                <a href="#" class="card-link">Edit <i class="bx bx-edit-alt me-1"></i></a>
+                <a href="{% url 'accounts:update_general_additional_info' %}" class="card-link">Edit <i class="bx bx-edit-alt me-1"></i></a>
             </div>
         </div>
       </div>  
