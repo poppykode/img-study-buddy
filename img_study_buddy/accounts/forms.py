@@ -16,7 +16,6 @@ class MyPasswordChangeForm(PasswordChangeForm):
         self.fields['new_password1'].help_text = ''
         self.fields['new_password2'].help_text = ''
 
-
 class GeneralAdditionalInfoForm(forms.ModelForm):
     class Meta:
         model = models.GeneralAdditionalInfo
@@ -69,6 +68,9 @@ class MotivationForm(forms.ModelForm):
         widgets = {
           'description': TinyMCE(attrs={'rows':4, 'cols':15}),
         }
+        labels = {
+            'description':'Motivation'
+        }
         fields = ('description',)
 
 class CoachAdditionalInfoForm(forms.ModelForm):
@@ -83,4 +85,16 @@ class CoachAdditionalInfoForm(forms.ModelForm):
             }
         model = models.CoachAdditionalInfo
         fields = ('rate','cv','nhs_experience')
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = models.User
+        labels = {
+            'username':'Email Address'
+        }
+        fields = (
+            'username',
+            'first_name',
+            'last_name',
+        )
 

@@ -80,7 +80,7 @@
                 <h6 class="card-title">{{obj.date_joined}}</h6>
             </div>
             <div class="col-md-12">
-                <a href="#" class="card-link">Edit <i class="bx bx-edit-alt me-1"></i></a>
+                <a href="{% url 'accounts:update_personal_details' %}" class="card-link">Edit <i class="bx bx-edit-alt me-1"></i></a>
             </div>
         </div>
     
@@ -150,9 +150,6 @@
             </div>
            
             {% endfor %}
-            <div class="col-md-12">
-                <a href="#" class="card-link">Edit <i class="bx bx-edit-alt me-1"></i></a>
-            </div>
         </div>
   
        
@@ -179,9 +176,7 @@
                 <h6 class="card-title">{{item.period_from}} - {{item.period_to}}</h6>
             </div>
             {% endfor %}
-            <div class="col-md-12">
-                <a href="javascript:void(0)" class="card-link">Edit</a>
-            </div>
+         
         </div>
   
        
@@ -211,10 +206,6 @@
             <div class="col-md-6">
                 <h5 class="card-title text-muted mb-3">NHS experience</h5>  
                 <h6 class="card-title">{{obj.user_coach_additional_info.nhs_experience}}</h6>  
-            </div>
-      
-            <div class="col-md-12">
-                <a href="#" class="card-link">Edit <i class="bx bx-edit-alt me-1"></i></a>
             </div>
         </div>
     

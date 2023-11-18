@@ -627,4 +627,42 @@ def update_general_additional_info(request):
     form = forms.GeneralAdditionalInfoForm(instance=obj)
     return render(request,template_name,{'obj':obj,'form':form})
 
+@login_required
+def update_personal_details(request):
+    template_name = 'registration/update_personal_details.html'
+    obj = get_object_or_404(models.User, id = request.user.id)
+    if request.method == 'POST':
+        form = forms.UserForm(request.POST, instance=obj)
+        if form.is_valid():
+            email = request.POST.get('username')
+            obj.username = email
+            obj.email= email
+            obj.first_name = request.POST.get('first_name')
+            obj.last_name = request.POST.get('last_name')
+            obj.save()
+            messages.success(request,'Info successfully updated.')
+            return redirect('accounts:profile')
+    form = forms.UserForm(instance=obj)
+    return render(request,template_name,{'obj':obj,'form':form})
+
+@login_required
+def update_personal_details(request):
+    template_name = 'registration/update_personal_details.html'
+    obj = get_object_or_404(models.Motivation, user = request.user)
+    if request.method == 'POST':
+        form = forms.UserForm(request.POST, instance=obj)
+        if form.is_valid():
+            email = request.POST.get('username')
+            obj.username = email
+            obj.email= email
+            obj.first_name = request.POST.get('first_name')
+            obj.last_name = request.POST.get('last_name')
+            obj.save()
+            messages.success(request,'Info successfully updated.')
+            return redirect('accounts:profile')
+    form = forms.UserForm(instance=obj)
+    return render(request,template_name,{'obj':obj,'form':form})
+
+
+
 
