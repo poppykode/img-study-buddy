@@ -64,7 +64,7 @@ def accept_or_reject_offer(request,offer_id,status):
     obj.save()
     if status == 'accepted':
         subject ='Offer content was approved'
-        message = f'Hi, {obj.user.get_full_name()}, congradulations, your content offer was approved.'
+        message = f'Hi, {obj.user.get_full_name()}, congradulations, your content offer titled "{obj.title}" was approved.'
     messages.success(request,"Offer was successfully {}".format(status))
     general_email(subject,message,[obj.user.username])
     return redirect('/')

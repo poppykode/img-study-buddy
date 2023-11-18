@@ -10,9 +10,11 @@
       <li class="breadcrumb-item">
         <a href="{% url 'accounts:profile' %}">Profile</a> 
       </li>
+      {% if request.user.is_coach %}
       <li class="breadcrumb-item">
         <a href="{% url 'offers:offers' %}">Offers</a>
       </li>
+      {% endif %}
       <li class="breadcrumb-item active">{{obj.title|title}}</li>
     </ol>
   </nav>
