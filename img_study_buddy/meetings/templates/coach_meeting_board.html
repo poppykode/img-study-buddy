@@ -1,0 +1,303 @@
+{% extends 'shared.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load auth_user %}
+{% load back_stepper %}
+{% block title %}Meetings{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb breadcrumb-style1">
+    <li class="breadcrumb-item">
+      <a href="{% url 'accounts:redirect_logged' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active">Meetings</li>
+  </ol>
+</nav>
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+  </button>
+  {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+<div class="mb-4">
+  <div class="nav-align-top mb-4">
+    <ul class="nav nav-pills mb-3" role="tablist">
+
+      <li class="nav-item">
+        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#incoming-requests"
+          aria-controls="incoming-requestse" aria-selected="false">
+          <i class="tf-icons bx bx-chevrons-right"></i>
+          Incoming Requests
+          <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-primary">{{incoming_meetings|count_mgs}}</span>
+        </button>
+      </li>
+ 
+      <li class="nav-item">
+        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#upcoming-meets"
+          aria-controls="upcoming-meets" aria-selected="false">
+          <i class="tf-icons bx bx-chevrons-up"></i>
+          Upcoming Meets
+          <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-primary">{{upcoming_meetings|count_mgs}}</span>
+        </button>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#past-meets"
+          aria-controls="past-meets" aria-selected="false">
+          <i class="tf-icons bx bx-chevrons-down"></i>
+          Past Meets
+          <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-primary">{{past_meetings|count_mgs}}</span>
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane fade active show" id="incoming-requests" role="tabpanel">
+        {% if incoming_meetings %}
+        <div class="row">
+          {% for incoming_meeting in incoming_meetings %}
+          <div class="col-md-6 col-lg-4 mb-3">
+            <div class="card h-100">
+              <img class="card-img-top img-image"
+                src="{{incoming_meeting.requester.user_general_additional_info.profile_picture.url}}"
+                alt="Card image cap">
+              <div class="card-body text-center">
+           
+                <h5 class="card-title">{{incoming_meeting.requester.get_full_name|title}}</h5>
+                <p class="card-text">
+                  {{incoming_meeting.requester.id|meetings_attended}} Meetings
+                </p>
+                <p class="card-text">
+                  {{incoming_meeting.requester.id|reliability}}% Reliability
+                </p>
+                <hr>
+                <span class="badge bg-warning">
+                  <small>
+                    <strong>Date Time:</strong>  
+                    {{incoming_meeting.date}} |
+                    {{incoming_meeting.start_time}}-{{incoming_meeting.end_time}} 
+                  </small>
+                 
+                </span>
+                
+                <p><a href="{% url 'meetings:reject_accept_or_cancel_a_meeting' incoming_meeting.id 'accepted' %}" class="btn btn-success mt-3">Accept Meeting</a></p>
+                <!-- needs fixing -->
+                <p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Reschedule2{{incoming_meeting.id}}">
+                  Reschedule
+                </button></p>
+                <p><a href="{% url 'meetings:reject_accept_or_cancel_a_meeting' incoming_meeting.id 'rejected' %}" class="btn btn-outline-danger">Reject</a></p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="card-text">No Incoming Requests</p>
+        {% endif %}
+      </div>
+      <div class="tab-pane fade" id="upcoming-meets" role="tabpanel">
+        {% if upcoming_meetings %}
+        <div class="row">
+          {% for upcoming_meeting in upcoming_meetings %}
+          <div class="col-md-6 col-lg-4 mb-3">
+            <div class="card h-100">
+              <img class="card-img-top img-image"
+                src="{{upcoming_meeting.requester.user_general_additional_info.profile_picture.url}}"
+                alt="Card image cap">
+              <div class="card-body text-center">
+                <h5 class="card-title">{{upcoming_meeting.requester.get_full_name|title}}</h5>
+                <p class="card-text">
+                  {{upcoming_meeting.requester.id|meetings_attended}} Meetings
+                </p>
+                <p class="card-text">
+                  {{upcoming_meeting.requester.id|reliability}}% Reliability
+                </p>
+                <hr>
+                <span class="badge bg-warning mb-3">
+                  <small>
+                  <strong>Date Time:</strong> 
+                  {{upcoming_meeting.date}} |
+                  {{upcoming_meeting.start_time}}-{{upcoming_meeting.end_time}} 
+                  </small>
+                </span>
+              
+                <p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Reschedule1{{upcoming_meeting.id}}">
+                  Reschedule
+                </button></p>
+                <p><a href="{% url 'meetings:reject_accept_or_cancel_a_meeting' upcoming_meeting.id 'cancelled' %}" class="btn btn-warning">Cancel</a></p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="card-text">No Upcoming Meets</p>
+        {% endif %}
+      </div>
+      <div class="tab-pane fade" id="past-meets" role="tabpanel">
+        {% if past_meetings %}
+        <div class="row">
+          {% for past_meeting in past_meetings %}
+          <div class="col-md-6 col-lg-4 mb-3">
+            <div class="card h-100">
+              <img class="card-img-top img-image"
+                src="{{past_meeting.requester.user_general_additional_info.profile_picture.url}}"
+                alt="Card image cap">
+              <div class="card-body text-center">
+                <h5 class="card-title">{{past_meeting.requester.get_full_name|title}}</h5>
+                <p class="card-text">
+                  {{past_meeting.requester.id|meetings_attended}} Meetings
+                </p>
+                <p class="card-text">
+                  {{past_meeting.requester.id|reliability}}% Reliability
+                </p>
+                <hr>
+                <span class="badge bg-warning">
+                  <small>
+                  <strong>Date Time:</strong> 
+                  {{past_meeting.date}} |
+                  {{past_meeting.start_time}}-{{past_meeting.end_time}} 
+                </span>
+              </small>
+                <p><a href="#" class="btn btn-primary mt-3">Propose Meeting</a></p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="card-text">No Past Meets</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% if upcoming_meetings %}
+  {% for upcoming_meeting in upcoming_meetings %}
+  <!-- Modal -->
+<div class="modal fade" id="Reschedule1{{upcoming_meeting.id}}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">Reschedule meeting with {{upcoming_meeting.requester.get_full_name|title}}</h5>
+        
+        <hr>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-header">
+        <span class="badge rounded-pill bg-label-primary">Current Meeting date: {{upcoming_meeting.date}} & Time: {{upcoming_meeting.start_time}} - {{upcoming_meeting.end_time}}</span>
+      
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'meetings:reschedule_a_meeting' upcoming_meeting.id  %}" method="POST">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="mb-3">
+                {{ form.date|as_crispy_field }}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                {{ form.start_time|as_crispy_field }}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                {{ form.end_time|as_crispy_field }}
+              </div>
+            </div>
+
+            <div class="col-md-12">
+
+              <div class="mb-3">
+                {{ form.remarks|as_crispy_field }}
+              </div>
+
+            </div>
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" class="btn btn-primary">Reschedule</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+  {% endfor %}
+{% endif %}
+
+{% if incoming_meetings %}
+  {% for incoming_meeting in incoming_meetings %}
+  <!-- Modal -->
+<div class="modal fade" id="Reschedule2{{incoming_meeting.id}}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">Reschedule meeting with {{incoming_meeting.requester.get_full_name|title}}</h5>
+        
+        <hr>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-header">
+        <span class="badge rounded-pill bg-label-primary">Current Meeting date: {{incoming_meeting.date}} & Time: {{incoming_meeting.start_time}} - {{incoming_meeting.end_time}}</span>
+      
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'meetings:reschedule_a_meeting' incoming_meeting.id  %}" method="POST">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="mb-3">
+                {{ form.date|as_crispy_field }}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                {{ form.start_time|as_crispy_field }}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                {{ form.end_time|as_crispy_field }}
+              </div>
+            </div>
+
+            <div class="col-md-12">
+
+              <div class="mb-3">
+                {{ form.remarks|as_crispy_field }}
+              </div>
+
+            </div>
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" class="btn btn-primary">Reschedule</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+  {% endfor %}
+{% endif %}
+{% endblock %}
+{% block js %}
+<script>
+  $(function() {
+  $('#html5-time-input').datepicker({
+    minDate: 0
+  });
+});
+</script>
+{% endblock %}

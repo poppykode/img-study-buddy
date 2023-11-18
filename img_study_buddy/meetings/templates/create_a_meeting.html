@@ -1,0 +1,103 @@
+{% extends 'shared.html' %}
+{% load static %}
+{% block title %}Create a meeting{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a href="{% url 'accounts:redirect_logged' %}">Home</a>
+        </li>
+        {% if not request.user.is_coach %}
+        <li class="breadcrumb-item">
+            <a href="{% url 'meetings:meetings' %}">Meeting Board</a>
+        </li>
+        {% else %}
+        <li class="breadcrumb-item">
+            <a href="{% url 'meetings:coach_meeting_board' %}">Meeting Board</a>
+        </li>
+        {% endif %}
+        <li class="breadcrumb-item active">Create a meeting</li>
+    </ol>
+</nav>
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+    </button>
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        Create a meeting
+         with >> <a href="{% url 'accounts:public_profile' requested.id %}"> {{requested.get_full_name|title}}</a>
+        {% if requested.is_candidate %}
+        (Study Buddy)
+        {% else %}
+        (Coach)
+        {% endif %}
+    </h5>
+      <small class="text-muted float-end">Meetings</small>
+    </div>
+    <div class="card-body">
+    {% if form.errors %}
+    <div class="mb-2">
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+                <span style="color:red;">{{ error }}</span>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}
+       
+        <form action="{% url 'meetings:create_a_meeting' requested.id %}" method="POST">
+
+            {% csrf_token %}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="mb-3">
+                    {{ form.date|as_crispy_field }}
+                </div>
+            
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    {{ form.start_time|as_crispy_field }}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    {{ form.end_time|as_crispy_field }}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="mb-3">
+                    {{ form.remarks|as_crispy_field }}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="modal-footer">
+                    <button class="btn btn-warning" onclick="window.history.back()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">Create a Meeting</button>
+                </div>
+            </div>
+    
+        </div>
+        </form>
+        </div>
+    </div>
+  </div>
+
+
+
+
+
+
+{% endblock %}
