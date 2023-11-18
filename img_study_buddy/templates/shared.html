@@ -163,20 +163,6 @@
 
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <p class="pt-3">Hello: <strong>{{request.user.get_full_name|title}}</strong></p>     
-              <!-- Search -->
-              <!-- <div class="navbar-nav align-items-center">
-                <div class="nav-item d-flex align-items-center">
-                  <i class="bx bx-search fs-4 lh-0"></i>
-                  <input
-                    type="text"
-                    class="form-control border-0 shadow-none"
-                    placeholder="Search..."
-                    aria-label="Search..."
-                  />
-                </div>
-              </div> -->
-              <!-- /Search -->
-
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <!-- Place this tag where you want the button to render. -->
                 
@@ -193,15 +179,8 @@
                     <li>
                       <a class="dropdown-item" href="#">
                         <div class="d-flex">
-                          <div class="flex-shrink-0 me-3">
-                            <div class="avatar avatar-online">
-                              {% if request.user.user_general_additional_info.profile_picture %}
-                              <img src="{{request.user.user_general_additional_info.profile_picture.url}}" alt  class="w-px-40 h-auto rounded-circle">
-                            {% else %}
-                            <img src=" {% static 'assets/img/placeholder.jpg' %}" alt  class="w-px-40 h-auto rounded-circle">
-                            {% endif %}
-                           
-                            </div>
+                          <div class="flex-shrink-0">
+                        
                           </div>
                           <div class="flex-grow-1">
                             <span class="fw-semibold d-block">{{request.user.first_name|title}} {{request.user.last_name|title}}</span>
