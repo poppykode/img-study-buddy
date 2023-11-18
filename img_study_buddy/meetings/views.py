@@ -6,7 +6,7 @@ from . import models
 from django.db.models import Q
 from accounts import models as m
 from . import forms
-from img_study_buddy.utils import meeting
+from img_study_buddy.utils import meeting_email
 
 # Create your views here.
 
@@ -15,13 +15,20 @@ def create_a_meeting(request,requested_id):
     template_name = 'create_a_meeting.html'
     form = forms.MeetingForm(request.POST or None)
     requested = get_object_or_404(m.User,id=requested_id)
+    msg = "New Meeting request"
+    user = request.user
     if request.method == 'POST':
         if form.is_valid():
+            date  = request.POST.get('date')
+            start_time = request.POST.get('start_time')
+            end_time = request.POST.get('end_time')
             new_form = form.save(commit=False)
-            new_form.requester = request.user
+            new_form.requester = user
             new_form.requested =requested
             new_form.save()
+
             messages.success(request,'Meeting request sent to {}'.format(requested.get_full_name()))
+            meeting_email(msg,user.get_full_name(), date, start_time, end_time,[requested.username,user.username])
             return redirect('accounts:public_profile',requested_id)  
     context ={
         'form':form,
@@ -37,14 +44,18 @@ def reject_accept_or_cancel_a_meeting(request,meeting_id,type):
     was_meeting_accepted = None
     was_meeting_cancelled = None
     was_meeting_rejected = None
+    msg = ''
     obj = get_object_or_404(models.Meeting, id=meeting_id)
     if obj.requested is not None:
         requested = obj.requested
     if type == 'accepted':
+        msg ="Meeting request accepted"
         was_meeting_accepted = True
     elif type == 'rejected':
+        msg ="Meeting request rejected"
         was_meeting_rejected = True
     else:
+        msg ="Meeting request cancelled"
         was_meeting_cancelled = True
     obj.was_meeting_accepted = was_meeting_accepted
     obj.was_meeting_cancelled = was_meeting_cancelled
@@ -52,6 +63,7 @@ def reject_accept_or_cancel_a_meeting(request,meeting_id,type):
     obj.requested = requested
     obj.save()
     messages.success(request,'Meeting was successfully {}'.format(type))
+    meeting_email(msg,obj.requester.get_full_name(), obj.date, obj.start_time, obj.end_time,[obj.requested.username,obj.requester.username])
     return redirect(url)
 
 @login_required
@@ -66,11 +78,13 @@ def reschedule_a_meeting(request, meeting_id):
             start_time = request.POST.get('start_time')
             end_time = request.POST.get('end_time')
             requester = meeting_obj.requester.get_full_name()
-            receipient = meeting_obj.requested.username()
+            receipient_requested = meeting_obj.requested.username
+            receipient_requester = meeting_obj.requester.username
             meeting_obj.save()
             #sent a meeting resheduled
-            meeting(msg,requester, date, start_time, end_time,[receipient,])
+            meeting_email(msg,requester, date, start_time, end_time,[receipient_requested,receipient_requester])
             messages.success(request,'Meeting successfully rescheduled')
+            return redirect('meetings:meetings')
     form = forms.MeetingForm(instance=meeting_obj)
     return render(request,template_name,{"obj":meeting_obj,"form":form})
 

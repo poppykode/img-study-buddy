@@ -1,6 +1,6 @@
 {% extends 'shared.html' %}
 {% load static %}
-{% block title %}Create a meeting{% endblock %}
+{% block title %}Update Exam Date & Availability{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
 <nav aria-label="breadcrumb">
@@ -9,9 +9,10 @@
             <a href="{% url 'accounts:redirect_logged' %}">Home</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{% url 'meetings:meetings' %}">Meeting Board</a>
+            <a href="{% url 'accounts:profile' %}">Profile</a>
         </li>
-        <li class="breadcrumb-item active">Create a meeting</li>
+
+        <li class="breadcrumb-item active">Update Exam Date & Availability</li>
     </ol>
 </nav>
 {% if messages %}
@@ -26,15 +27,9 @@
 <div class="card mb-4">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">
-            Create a meeting
-            with >> <a href="{% url 'accounts:public_profile' requested.id %}"> {{requested.get_full_name|title}}</a>
-            {% if requested.is_candidate %}
-            (Study Buddy)
-            {% else %}
-            (Coach)
-            {% endif %}
+            Update Exam Date & Availability
         </h5>
-        <small class="text-muted float-end">Meetings</small>
+        <small class="text-muted float-end">Profile</small>
     </div>
     <div class="card-body">
         {% if form.errors %}
@@ -46,38 +41,27 @@
             {% endfor %}
         </div>
         {% endif %}
-        <form action="{% url 'meetings:create_a_meeting' requested.id %}" method="POST">
+        <form action="{% url 'accounts:update_exam_date_and_availability' %}" method="POST">
             {% csrf_token %}
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="mb-3">
-                        {{ form.date|as_crispy_field }}
+                        {{ form.exam_date|as_crispy_field }}
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="mb-3">
-                        {{ form.start_time|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        {{ form.end_time|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="mb-3">
-                        {{ form.remarks|as_crispy_field }}
+                        {{ form.availability|as_crispy_field }}
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="modal-footer">
-                        <a href="{% url 'meetings:meetings' %}" class="btn btn-warning">
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-warning">
                             Cancel
                         </a>
-                        <button type="submit" class="btn btn-primary">Create a Meeting</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </div>
-
             </div>
         </form>
     </div>

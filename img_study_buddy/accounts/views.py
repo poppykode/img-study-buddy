@@ -21,11 +21,11 @@ from meetings.models import Meeting
 from img_study_buddy.utils import (
     generate_password,
     has_session,
-    delete_a_file,
     deserialise_,
     serialise_,
     complete_registration,
-    dash_board_redirect
+    dash_board_redirect,
+    general_email
     
 ) 
 from . import forms
@@ -494,14 +494,19 @@ def admin_profile(request,coach_id):
 @login_required
 def accept_or_reject_application(request,coach_id,status):
     coach_qs = get_object_or_404(models.User,id=coach_id)
+    subject = 'Application failed'
+    message = 'Hi, '+ coach_qs.get_full_name() + ' i regret to tell you that your application was not successful, for more info plese email info@imgstudybuddy.com.'
     is_coach_accepted = False
     if status =='accepted':
+        subject ='Application success'
+        message = 'Hi, '+ coach_qs.get_full_name() + 'congradulations, your application was successfull, please click <a href="http://imgstudybuddies.pythonanywhere.com/">link</a>  to login in.'
         is_coach_accepted = True
     coach_qs.is_coach_accepted = is_coach_accepted
     coach_qs.account_status = status
     coach_qs.save()
     #send_email
     messages.success(request,'Application has been successfully '+status+' an email notification will be sent to '+coach_qs.get_full_name())
+    general_email(subject,message,[coach_qs.username])
     return redirect('accounts:admin_profile',coach_id)
 
 @login_required
@@ -590,4 +595,20 @@ def upload_profile_picture(request):
     else:
         args = {'form': form, 'obj': user_qs}
         return render(request, template_name, args)
+
+@login_required
+def update_exam_date_and_availability(request):
+    template_name = 'registration/update_exam_date_and_availability.html'
+    obj = get_object_or_404(models.CandidateAdditionalInfo, user = request.user)
+    if request.method == 'POST':
+        form = forms.ExamDateAndAvailabiltyForm(request.POST, instance=obj)
+        if form.is_valid():
+            obj.exam_date = request.POST.get('exam_date')
+            obj.availability = request.POST.get('availability')
+            obj.save()
+            messages.success(request,'Info successfully updated.')
+            return redirect('accounts:profile')
+    form = forms.ExamDateAndAvailabiltyForm(instance=obj)
+    return render(request,template_name,{'obj':obj,'form':form})
+
 

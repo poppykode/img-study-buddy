@@ -1,6 +1,6 @@
 {% extends 'shared.html' %}
 {% load static %}
-{% block title %}Create a meeting{% endblock %}
+{% block title %}Reschedule a meeting{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
 <nav aria-label="breadcrumb">
@@ -11,7 +11,8 @@
         <li class="breadcrumb-item">
             <a href="{% url 'meetings:meetings' %}">Meeting Board</a>
         </li>
-        <li class="breadcrumb-item active">Create a meeting</li>
+
+        <li class="breadcrumb-item active">Reschedule a meeting</li>
     </ol>
 </nav>
 {% if messages %}
@@ -26,13 +27,8 @@
 <div class="card mb-4">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">
-            Create a meeting
-            with >> <a href="{% url 'accounts:public_profile' requested.id %}"> {{requested.get_full_name|title}}</a>
-            {% if requested.is_candidate %}
-            (Study Buddy)
-            {% else %}
-            (Coach)
-            {% endif %}
+            Reschedule meeting for {{obj.date}} from {{obj.start_time}} - {{obj.end_time}} with
+            {{obj.requested.get_full_name|title}}
         </h5>
         <small class="text-muted float-end">Meetings</small>
     </div>
@@ -46,7 +42,7 @@
             {% endfor %}
         </div>
         {% endif %}
-        <form action="{% url 'meetings:create_a_meeting' requested.id %}" method="POST">
+        <form action="{% url 'meetings:reschedule_a_meeting' obj.id %}" method="POST">
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-4">
@@ -71,13 +67,12 @@
                 </div>
                 <div class="col-md-12">
                     <div class="modal-footer">
-                        <a href="{% url 'meetings:meetings' %}" class="btn btn-warning">
+                        <a href='{% url "meetings:meetings" %}' class="btn btn-warning">
                             Cancel
                         </a>
-                        <button type="submit" class="btn btn-primary">Create a Meeting</button>
+                        <button type="submit" class="btn btn-primary">Reschedule a Meeting</button>
                     </div>
                 </div>
-
             </div>
         </form>
     </div>

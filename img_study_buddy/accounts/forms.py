@@ -2,6 +2,7 @@ from django import forms
 from . import models
 from tinymce.widgets import TinyMCE
 from django.contrib.auth.forms import PasswordChangeForm
+from datetime import date, datetime
 
 class ProfilePictureForm(forms.Form):
     profile_picture = forms.ImageField(
@@ -28,7 +29,7 @@ class CandidateAdditionalInfoForm(forms.ModelForm):
             'exam_date': forms.widgets.DateInput(attrs={'class': 'datepicker', 'data-date-format': 'YYYY-MM-DD', 'type': 'date'}),
         }
         labels = {
-            'availability':'Availability (hrs/day)'
+            'availability':'Availability (hrs per day)'
         }
 
         fields = ('exam_date','availability',)
@@ -73,3 +74,26 @@ class CoachAdditionalInfoForm(forms.ModelForm):
             }
         model = models.CoachAdditionalInfo
         fields = ('rate','cv','nhs_experience')
+
+class ExamDateAndAvailabiltyForm(forms.ModelForm):
+    class Meta:
+        model = models.CandidateAdditionalInfo
+        labels = {
+            'availability':'Availability (hrs per day)'
+        }
+        widgets = {
+            'exam_date': forms.widgets.DateInput(attrs={'class': 'datepicker', 'data-date-format': 'YYYY-MM-DD', 'type': 'date', 'min':date.today()})
+        }
+        fields = ('exam_date','availability',)
+
+        def clean(self):
+            cleaned_data = super().clean()
+            exam_date = self.cleaned_data['exam_date']
+            availability = self.cleaned_data['availability']
+            if exam_date < date.today():
+                raise forms.ValidationError("Date cannot be in the past.")
+            if availability < 0:
+                raise forms.ValidationError("Availability cannot be less than 0 hrs per day.")
+            return cleaned_data
+
+

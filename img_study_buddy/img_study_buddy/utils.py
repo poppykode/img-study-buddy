@@ -59,7 +59,7 @@ def generate_password():
     new_password = User.objects.make_random_password()
     return new_password
 
-def meeting(subject,requester, date, start_time, end_time,recipient_list):
+def meeting_email(subject,requester, date, start_time, end_time,recipient_list):
     today = datetime.date.today()
     formatted_date = today.strftime("%A %d %B, %Y")
     message_html = get_template('email/email.html').render({
@@ -70,6 +70,20 @@ def meeting(subject,requester, date, start_time, end_time,recipient_list):
         'end_time':end_time,
         'date':formatted_date
     })
+    send_email(subject,message_html,recipient_list)
+
+def general_email(subject,message,recipient_list):
+    today = datetime.date.today()
+    formatted_date = today.strftime("%A %d %B, %Y")
+    message_html = get_template('email/general.html').render({
+        'subject': subject,
+        'message': message,
+        'date':formatted_date
+    })
+    send_email(subject,message_html,recipient_list)
+
+
+def send_email(subject,message_html,recipient_list):
     try:
         send_mail(
             subject=subject,

@@ -8,8 +8,8 @@ class MeetingForm(forms.ModelForm):
         widgets = {
             'remarks': forms.Textarea(attrs={'rows':4, 'cols':15}),
             'date': forms.widgets.DateInput(attrs={'class': 'datepicker', 'data-date-format': 'YYYY-MM-DD', 'type': 'date', 'min':date.today()}),
-            'start_time': forms.widgets.DateInput(attrs={'class': 'datepicker', 'type': 'time', 'id':'html5-time-input'}),
-            'end_time': forms.widgets.DateInput(attrs={'class': 'datepicker', 'type': 'time', 'id':'html5-time-input'}),
+            'start_time': forms.widgets.TimeInput(attrs={'class': 'datepicker', 'type': 'time'}),
+            'end_time': forms.widgets.TimeInput(attrs={'class': 'datepicker', 'type': 'time'}),
         }
         labels = {
             'remarks':'Remarks (Optional)'
