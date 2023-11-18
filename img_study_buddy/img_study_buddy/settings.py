@@ -62,7 +62,6 @@ INSTALLED_APPS = [
     'formtools',
     'crispy_forms',
     'crispy_bootstrap5',
-    'django_quill',
     'tinymce'
     
 ]

@@ -1,8 +1,8 @@
 import os
 import datetime as dt
-import plotly.express as px
-import pandas as pd
-from plotly.offline import plot
+# import plotly.express as px
+# import pandas as pd
+# from plotly.offline import plot
 from formtools.wizard.views import SessionWizardView
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
@@ -388,13 +388,13 @@ def admin_dashboard(request):
     rejected = len(qs.filter(is_coach=True).filter(account_status = 'rejected'))
     values = [accepted, pending,rejected]
     names =  ["Accepted","Pending","Rejected"]
-    df = px.data.iris()
-    fig = px.pie(df,values=values, names=names)
-    pie_chart = plot(fig, output_type="div")
+    # df = px.data.iris()
+    # fig = px.pie(df,values=values, names=names)
+    # pie_chart = plot(fig, output_type="div")
     offers = Offer.objects.filter(status='pending')
     context ={
         'users':qs,
-        "pie_chart":pie_chart,
+        # "pie_chart":pie_chart,
         'meetings':meetings,
         'offers':offers,
         'number_of_offers':len(offers)
